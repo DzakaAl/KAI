@@ -33,23 +33,20 @@ class AuthController extends Controller
             'password' => 'required|min:6|confirmed',
         ]);
 
-        // ✅ Cek apakah email sudah terdaftar
         if (User::where('email', $request->email)->exists()) {
             return response()->json([
                 'success' => false,
-                'message' => '❌ Maaf, email sudah terdaftar. Silakan gunakan email lain.'
+                'message' => 'Maaf, email sudah terdaftar. Silakan gunakan email lain.'
             ], 400);
         }
 
-        // ✅ Cek apakah nomor HP sudah terdaftar
         if (User::where('phone', $request->phone)->exists()) {
             return response()->json([
                 'success' => false,
-                'message' => '❌ Maaf, nomor HP sudah terdaftar. Silakan gunakan nomor lain.'
+                'message' => 'Maaf, nomor HP sudah terdaftar. Silakan gunakan nomor lain.'
             ], 400);
         }
 
-        // ✅ Buat akun baru
         User::create([
             'name'     => $request->name,
             'email'    => $request->email,
@@ -59,7 +56,7 @@ class AuthController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => '✅ Registrasi berhasil! Silakan login.'
+            'message' => 'Registrasi berhasil! Silakan login.'
         ]);
     }
 
@@ -70,10 +67,10 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return response()->json(['success' => true, 'message' => '🚆 Login berhasil!']);
+            return response()->json(['success' => true, 'message' => ' Login berhasil!']);
         }
 
-        return response()->json(['success' => false, 'message' => '❌ Email atau password salah!']);
+        return response()->json(['success' => false, 'message' => ' Email atau password salah!']);
     }
 
     // ✅ Logout

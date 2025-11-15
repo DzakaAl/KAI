@@ -1,16 +1,51 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard KAI</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body class="bg-light p-5">
-  <div class="container text-center">
-    <h1>Selamat datang, {{ $user->name }}</h1>
-    <p>Email: {{ $user->email }}</p>
-    <p>Nomor HP: {{ $user->phone }}</p>
-    <a href="{{ route('logout') }}" class="btn btn-danger mt-3">Logout</a>
+
+@extends('layout.header')
+@section('content')
+
+
+  <!-- Asset List -->
+  <div class="mt-4">
+      <h5 class="fw-bold mb-3">Daftar Aset Stasiun</h5>
+      <div class="list-group shadow-sm rounded-4 overflow-hidden">
+
+        <div class="list-group-item p-3">
+          <h6 class="fw-bold mb-2">Stasiun Gambir</h6>
+          <div class="row small text-muted mb-2">
+            <div class="col-6 col-md-3">📹 CCTV: <strong>42</strong></div>
+            <div class="col-6 col-md-3">💻 Komputer: <strong>18</strong></div>
+            <div class="col-6 col-md-3">🛠️ Peralatan: <strong>27</strong></div>
+            <div class="col-6 col-md-3">📦 Kondisi Baik: <strong>91%</strong></div>
+          </div>
+        </div>
+
+        <div class="list-group-item p-3">
+          <h6 class="fw-bold mb-2">Stasiun Bandung</h6>
+          <div class="row small text-muted mb-2">
+            <div class="col-6 col-md-3">📹 CCTV: <strong>28</strong></div>
+            <div class="col-6 col-md-3">💻 Komputer: <strong>12</strong></div>
+            <div class="col-6 col-md-3">🛠️ Peralatan: <strong>19</strong></div>
+            <div class="col-6 col-md-3">📦 Kondisi Baik: <strong>88%</strong></div>
+          </div>
+        </div>
+
+        <div class="list-group-item p-3">
+          <h6 class="fw-bold mb-2">Stasiun Surabaya Gubeng</h6>
+          <div class="row small text-muted mb-2">
+            <div class="col-6 col-md-3">📹 CCTV: <strong>33</strong></div>
+            <div class="col-6 col-md-3">💻 Komputer: <strong>15</strong></div>
+            <div class="col-6 col-md-3">🛠️ Peralatan: <strong>23</strong></div>
+            <div class="col-6 col-md-3">📦 Kondisi Baik: <strong>94%</strong></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
-</body>
-</html>
+
+
+@endsection
+
+
+
+

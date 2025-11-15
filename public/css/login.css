@@ -63,6 +63,13 @@ form {
     padding: 40px 30px;
     transition: 0.4s;
 }
+#loginError {
+    display: flex;
+    justify-content: center; /* posisi horizontal tengah */
+    align-items: center; /* posisi vertikal tengah */
+    text-align: center; /* kalau teks lebih dari 1 baris */
+    font-size: larger;
+}
 
 .title {
     text-align: center;

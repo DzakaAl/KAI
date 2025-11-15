@@ -33,31 +33,39 @@ passwordField.addEventListener('input', () => {
   }
 });
 
+const emailErrror = document.getElementById('emailError');
+const phoneError = document.getElementById('phoneError');
+const confirmError = document.getElementById('confirmError');
+
 // REGISTER FORM
 document.getElementById('registerForm').addEventListener('submit', async (e) => {
   e.preventDefault();
+
+  emailErrror.innerHTML = "";
+  phoneError.innerHTML = "";
+  confirmError.innerHTML = "";
+
   const name = document.getElementById('registerName').value.trim();
   const email = document.getElementById('registerEmail').value.trim();
   const phone = document.getElementById('registerPhone').value.trim();
   const password = document.getElementById('registerPassword').value;
   const confirm = document.getElementById('confirmPassword').value;
 
-  // Validasi email dan nomor HP
   const gmailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
   const phoneRegex = /^(?:\+62|62|0)8[1-9][0-9]{7,10}$/;
 
   if (!gmailRegex.test(email)) {
-    alert("Gunakan hanya email Gmail (contoh: nama@gmail.com)");
+    emailErrror.innerHTML = "Gunakan hanya email Gmail";
     return;
   }
 
   if (!phoneRegex.test(phone)) {
-    alert("Nomor HP tidak valid! Gunakan format +628xx atau 08xx");
+    phoneError.innerHTML = "Nomor HP tidak valid!";
     return;
   }
 
   if (password !== confirm) {
-    alert("❌ Password tidak cocok!");
+    confirmError.innerHTML = "Password tidak cocok!";
     return;
   }
 
@@ -71,13 +79,23 @@ document.getElementById('registerForm').addEventListener('submit', async (e) => 
   });
 
   const result = await response.json();
-  if (result.success) {
-    alert('✅ ' + result.message);
-    authCard.classList.remove('active');
-    e.target.reset();
-  } else {
-    alert('❌ ' + (result.message || 'Coba lagi.'));
+
+  if (!result.success) {
+
+    if (result.message.includes('email')) {
+        emailErrror.innerHTML = result.message;
+    }
+
+    if (result.message.includes('nomor HP')) {
+        phoneError.innerHTML = result.message;
+    }
+
+    return;
   }
+
+  // Jika berhasil
+  document.getElementById('registerForm').reset();
+  authCard.classList.remove('active');
 });
 
 // LOGIN FORM
@@ -85,6 +103,9 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
   e.preventDefault();
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value;
+ const loginError = document.getElementById('loginError');
+    loginError.innerHTML = "";
+
 
   const response = await fetch('/login', {
     method: 'POST',
@@ -100,6 +121,7 @@ document.getElementById('loginForm').addEventListener('submit', async (e) => {
     alert('🚆 ' + result.message);
     window.location.href = '/dashboard';
   } else {
-    alert('❌ ' + result.message);
+    loginError.innerHTML = result.message;
+    // alert('❌ ' + result.message);
   }
 });
