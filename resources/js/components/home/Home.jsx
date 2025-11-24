@@ -44,6 +44,7 @@ const blueIcon = new L.Icon({
 function Home({ user, onLogout }) {
   const navigate = useNavigate()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [activeCategory, setActiveCategory] = useState('all')
@@ -202,12 +203,6 @@ function Home({ user, onLogout }) {
           <h1 className="welcome-text">Selamat Datang {welcomeName}!</h1>
         </div>
         <div className="header-right">
-          <button className="search-mobile-btn" onClick={() => setSearchOpen(!searchOpen)}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
           <button className="user-button" onClick={() => setMenuOpen(!menuOpen)}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
               <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -307,6 +302,38 @@ function Home({ user, onLogout }) {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="mobile-search-input"
           />
+          <div className="profile-menu-wrapper-mobile">
+            <button className="profile-mobile-btn-map" onClick={() => setProfileMenuOpen(!profileMenuOpen)}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+            {profileMenuOpen && (
+              <div className="profile-dropdown-map">
+                <div className="profile-info">
+                  <div className="profile-avatar">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
+                  <div className="profile-details">
+                    <p className="profile-name">{welcomeName}</p>
+                    <p className="profile-email">{user?.email || 'user@kai.id'}</p>
+                  </div>
+                </div>
+                <button className="logout-btn" onClick={onLogout}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <polyline points="16 17 21 12 16 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Mobile Search Results List */}

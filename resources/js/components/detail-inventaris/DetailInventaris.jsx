@@ -9,12 +9,16 @@ function DetailInventaris() {
   const [showEditModal, setShowEditModal] = useState(false)
   const [editingItem, setEditingItem] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
+  const [filterPerangkat, setFilterPerangkat] = useState('all')
+  const [filterStatus, setFilterStatus] = useState('all')
+  const [activeMenuId, setActiveMenuId] = useState(null)
   const [allItems, setAllItems] = useState([])
   const [formData, setFormData] = useState({
     nama: '',
     lokasi: '',
     status: 'aktif'
   })
+  const [currentData, setCurrentData] = useState(null)
 
   // Data inventaris per perangkat (struktur: '1-1' = lokasi 1, perangkat 1)
   const inventarisData = {
@@ -25,26 +29,26 @@ function DetailInventaris() {
       aktif: 18,
       nonAktif: 2,
       items: [
-        { id: 1, nama: 'CCTV_01', lokasi: 'Pintu Masuk Utara 1', status: 'aktif' },
-        { id: 2, nama: 'CCTV_02', lokasi: 'Pintu Masuk Utara 2', status: 'tidak_aktif' },
-        { id: 3, nama: 'CCTV_03', lokasi: 'Pintu Masuk Barat', status: 'aktif' },
-        { id: 4, nama: 'CCTV_04', lokasi: 'Peron 1', status: 'aktif' },
-        { id: 5, nama: 'CCTV_05', lokasi: 'Peron 2', status: 'aktif' },
-        { id: 6, nama: 'CCTV_06', lokasi: 'Peron 3', status: 'aktif' },
-        { id: 7, nama: 'CCTV_07', lokasi: 'Ruang Tunggu', status: 'aktif' },
-        { id: 8, nama: 'CCTV_08', lokasi: 'Loket Tiket', status: 'aktif' },
-        { id: 9, nama: 'CCTV_09', lokasi: 'Area Kantor', status: 'aktif' },
-        { id: 10, nama: 'CCTV_10', lokasi: 'Koridor Utama', status: 'aktif' },
-        { id: 11, nama: 'CCTV_11', lokasi: 'Tangga Darurat 1', status: 'tidak_aktif' },
-        { id: 12, nama: 'CCTV_12', lokasi: 'Tangga Darurat 2', status: 'aktif' },
-        { id: 13, nama: 'CCTV_13', lokasi: 'Area Parkir', status: 'aktif' },
-        { id: 14, nama: 'CCTV_14', lokasi: 'Pintu Keluar', status: 'aktif' },
-        { id: 15, nama: 'CCTV_15', lokasi: 'Basement', status: 'aktif' },
-        { id: 16, nama: 'CCTV_16', lokasi: 'Ruang Mesin', status: 'aktif' },
-        { id: 17, nama: 'CCTV_17', lokasi: 'Area Outdoor 1', status: 'aktif' },
-        { id: 18, nama: 'CCTV_18', lokasi: 'Area Outdoor 2', status: 'aktif' },
-        { id: 19, nama: 'CCTV_19', lokasi: 'Peron 4', status: 'tidak_aktif' },
-        { id: 20, nama: 'CCTV_20', lokasi: 'Peron 5', status: 'aktif' }
+        { id: 1, nama: 'CCTV_01', lokasi: 'Pintu Masuk Utara 1', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 2, nama: 'CCTV_02', lokasi: 'Pintu Masuk Utara 2', status: 'tidak_aktif', jenis: 'CCTV IP Camera' },
+        { id: 3, nama: 'CCTV_03', lokasi: 'Pintu Masuk Barat', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 4, nama: 'CCTV_04', lokasi: 'Peron 1', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 5, nama: 'CCTV_05', lokasi: 'Peron 2', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 6, nama: 'CCTV_06', lokasi: 'Peron 3', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 7, nama: 'CCTV_07', lokasi: 'Ruang Tunggu', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 8, nama: 'CCTV_08', lokasi: 'Loket Tiket', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 9, nama: 'CCTV_09', lokasi: 'Area Kantor', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 10, nama: 'CCTV_10', lokasi: 'Koridor Utama', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 11, nama: 'CCTV_11', lokasi: 'Tangga Darurat 1', status: 'tidak_aktif', jenis: 'CCTV IP Camera' },
+        { id: 12, nama: 'CCTV_12', lokasi: 'Tangga Darurat 2', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 13, nama: 'CCTV_13', lokasi: 'Area Parkir', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 14, nama: 'CCTV_14', lokasi: 'Pintu Keluar', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 15, nama: 'CCTV_15', lokasi: 'Basement', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 16, nama: 'CCTV_16', lokasi: 'Ruang Mesin', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 17, nama: 'CCTV_17', lokasi: 'Area Outdoor 1', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 18, nama: 'CCTV_18', lokasi: 'Area Outdoor 2', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 19, nama: 'CCTV_19', lokasi: 'Peron 4', status: 'tidak_aktif', jenis: 'CCTV IP Camera' },
+        { id: 20, nama: 'CCTV_20', lokasi: 'Peron 5', status: 'aktif', jenis: 'CCTV IP Camera' }
       ]
     },
     '1-2': { // Stasiun Lempuyangan - NVR Server
@@ -54,8 +58,8 @@ function DetailInventaris() {
       aktif: 2,
       nonAktif: 0,
       items: [
-        { id: 1, nama: 'NVR_SL_01', lokasi: 'Ruang Server 1', status: 'aktif' },
-        { id: 2, nama: 'NVR_SL_02', lokasi: 'Ruang Server 2', status: 'aktif' }
+        { id: 1, nama: 'NVR_SL_01', lokasi: 'Ruang Server 1', status: 'aktif', jenis: 'NVR Server' },
+        { id: 2, nama: 'NVR_SL_02', lokasi: 'Ruang Server 2', status: 'aktif', jenis: 'NVR Server' }
       ]
     },
     '1-3': { // Stasiun Lempuyangan - Core Switch
@@ -65,7 +69,7 @@ function DetailInventaris() {
       aktif: 1,
       nonAktif: 0,
       items: [
-        { id: 1, nama: 'CS_SL_01', lokasi: 'Ruang Server', status: 'aktif' }
+        { id: 1, nama: 'CS_SL_01', lokasi: 'Ruang Server', status: 'aktif', jenis: 'Core Switch' }
       ]
     },
     '1-4': { // Stasiun Lempuyangan - Access Point WiFi
@@ -75,12 +79,12 @@ function DetailInventaris() {
       aktif: 5,
       nonAktif: 1,
       items: [
-        { id: 1, nama: 'AP_WiFi_SL_01', lokasi: 'Lantai 1', status: 'aktif' },
-        { id: 2, nama: 'AP_WiFi_SL_02', lokasi: 'Lantai 2', status: 'aktif' },
-        { id: 3, nama: 'AP_WiFi_SL_03', lokasi: 'Peron', status: 'aktif' },
-        { id: 4, nama: 'AP_WiFi_SL_04', lokasi: 'Ruang Tunggu', status: 'aktif' },
-        { id: 5, nama: 'AP_WiFi_SL_05', lokasi: 'Area Kantor', status: 'aktif' },
-        { id: 6, nama: 'AP_WiFi_SL_06', lokasi: 'Outdoor', status: 'tidak_aktif' }
+        { id: 1, nama: 'AP_WiFi_SL_01', lokasi: 'Lantai 1', status: 'aktif', jenis: 'Access Point WiFi' },
+        { id: 2, nama: 'AP_WiFi_SL_02', lokasi: 'Lantai 2', status: 'aktif', jenis: 'Access Point WiFi' },
+        { id: 3, nama: 'AP_WiFi_SL_03', lokasi: 'Peron', status: 'aktif', jenis: 'Access Point WiFi' },
+        { id: 4, nama: 'AP_WiFi_SL_04', lokasi: 'Ruang Tunggu', status: 'aktif', jenis: 'Access Point WiFi' },
+        { id: 5, nama: 'AP_WiFi_SL_05', lokasi: 'Area Kantor', status: 'aktif', jenis: 'Access Point WiFi' },
+        { id: 6, nama: 'AP_WiFi_SL_06', lokasi: 'Outdoor', status: 'tidak_aktif', jenis: 'Access Point WiFi' }
       ]
     },
     '2-1': { // Stasiun Tugu - CCTV IP Camera
@@ -90,33 +94,39 @@ function DetailInventaris() {
       aktif: 24,
       nonAktif: 2,
       items: [
-        { id: 1, nama: 'CCTV_ST_01', lokasi: 'Pintu Masuk Utama', status: 'aktif' },
-        { id: 2, nama: 'CCTV_ST_02', lokasi: 'Pintu Masuk Samping', status: 'aktif' },
-        { id: 3, nama: 'CCTV_ST_03', lokasi: 'Hall Utama', status: 'tidak_aktif' },
-        { id: 4, nama: 'CCTV_ST_04', lokasi: 'Peron 1', status: 'aktif' },
-        { id: 5, nama: 'CCTV_ST_05', lokasi: 'Peron 2', status: 'aktif' },
-        { id: 6, nama: 'CCTV_ST_06', lokasi: 'Peron 3', status: 'aktif' },
-        { id: 7, nama: 'CCTV_ST_07', lokasi: 'Peron 4', status: 'aktif' },
-        { id: 8, nama: 'CCTV_ST_08', lokasi: 'Ruang Tunggu A', status: 'aktif' },
-        { id: 9, nama: 'CCTV_ST_09', lokasi: 'Ruang Tunggu B', status: 'aktif' },
-        { id: 10, nama: 'CCTV_ST_10', lokasi: 'Loket Tiket 1', status: 'aktif' },
-        { id: 11, nama: 'CCTV_ST_11', lokasi: 'Loket Tiket 2', status: 'tidak_aktif' },
-        { id: 12, nama: 'CCTV_ST_12', lokasi: 'Area Kantor', status: 'aktif' },
-        { id: 13, nama: 'CCTV_ST_13', lokasi: 'Koridor Utama', status: 'aktif' },
-        { id: 14, nama: 'CCTV_ST_14', lokasi: 'Tangga Darurat 1', status: 'aktif' },
-        { id: 15, nama: 'CCTV_ST_15', lokasi: 'Tangga Darurat 2', status: 'aktif' },
-        { id: 16, nama: 'CCTV_ST_16', lokasi: 'Area Lift', status: 'aktif' },
-        { id: 17, nama: 'CCTV_ST_17', lokasi: 'Area Parkir Level 1', status: 'aktif' },
-        { id: 18, nama: 'CCTV_ST_18', lokasi: 'Area Parkir Level 2', status: 'aktif' },
-        { id: 19, nama: 'CCTV_ST_19', lokasi: 'Pintu Keluar', status: 'aktif' },
-        { id: 20, nama: 'CCTV_ST_20', lokasi: 'Basement 1', status: 'aktif' },
-        { id: 21, nama: 'CCTV_ST_21', lokasi: 'Basement 2', status: 'tidak_aktif' },
-        { id: 22, nama: 'CCTV_ST_22', lokasi: 'Ruang Mesin', status: 'aktif' },
-        { id: 23, nama: 'CCTV_ST_23', lokasi: 'Area Outdoor 1', status: 'aktif' },
-        { id: 24, nama: 'CCTV_ST_24', lokasi: 'Area Outdoor 2', status: 'aktif' },
-        { id: 25, nama: 'CCTV_ST_25', lokasi: 'Peron 5', status: 'aktif' },
-        { id: 26, nama: 'CCTV_ST_26', lokasi: 'Peron 6', status: 'aktif' }
+        { id: 1, nama: 'CCTV_ST_01', lokasi: 'Pintu Masuk Utama', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 2, nama: 'CCTV_ST_02', lokasi: 'Pintu Masuk Samping', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 3, nama: 'CCTV_ST_03', lokasi: 'Hall Utama', status: 'tidak_aktif', jenis: 'CCTV IP Camera' },
+        { id: 4, nama: 'CCTV_ST_04', lokasi: 'Peron 1', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 5, nama: 'CCTV_ST_05', lokasi: 'Peron 2', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 6, nama: 'CCTV_ST_06', lokasi: 'Peron 3', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 7, nama: 'CCTV_ST_07', lokasi: 'Peron 4', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 8, nama: 'CCTV_ST_08', lokasi: 'Ruang Tunggu A', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 9, nama: 'CCTV_ST_09', lokasi: 'Ruang Tunggu B', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 10, nama: 'CCTV_ST_10', lokasi: 'Loket Tiket 1', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 11, nama: 'CCTV_ST_11', lokasi: 'Loket Tiket 2', status: 'tidak_aktif', jenis: 'CCTV IP Camera' },
+        { id: 12, nama: 'CCTV_ST_12', lokasi: 'Area Kantor', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 13, nama: 'CCTV_ST_13', lokasi: 'Koridor Utama', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 14, nama: 'CCTV_ST_14', lokasi: 'Tangga Darurat 1', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 15, nama: 'CCTV_ST_15', lokasi: 'Tangga Darurat 2', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 16, nama: 'CCTV_ST_16', lokasi: 'Area Lift', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 17, nama: 'CCTV_ST_17', lokasi: 'Area Parkir Level 1', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 18, nama: 'CCTV_ST_18', lokasi: 'Area Parkir Level 2', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 19, nama: 'CCTV_ST_19', lokasi: 'Pintu Keluar', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 20, nama: 'CCTV_ST_20', lokasi: 'Basement 1', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 21, nama: 'CCTV_ST_21', lokasi: 'Basement 2', status: 'tidak_aktif', jenis: 'CCTV IP Camera' },
+        { id: 22, nama: 'CCTV_ST_22', lokasi: 'Ruang Mesin', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 23, nama: 'CCTV_ST_23', lokasi: 'Area Outdoor 1', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 24, nama: 'CCTV_ST_24', lokasi: 'Area Outdoor 2', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 25, nama: 'CCTV_ST_25', lokasi: 'Peron 5', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 26, nama: 'CCTV_ST_26', lokasi: 'Peron 6', status: 'aktif', jenis: 'CCTV IP Camera' }
       ]
+    },
+    // Data untuk semua perangkat per lokasi (tanpa perangkatId)
+    '1': { // Stasiun Lempuyangan - Semua Perangkat
+      perangkatNama: 'Semua Perangkat',
+      lokasiNama: 'Stasiun Lempuyangan',
+      items: [] // Akan digabungkan dari semua perangkat
     },
     'default': {
       perangkatNama: 'Perangkat',
@@ -128,21 +138,56 @@ function DetailInventaris() {
     }
   }
 
-  const currentData = inventarisData[`${id}-${perangkatId}`] || inventarisData.default
-
-  // Initialize items
+  // Initialize data dan items
   useEffect(() => {
-    if (currentData && currentData.items) {
-      setAllItems(currentData.items)
-    } else {
-      setAllItems([])
-    }
-  }, [id, perangkatId, currentData])
+    let data;
+    let items = [];
 
-  const filteredItems = allItems.filter(item =>
-    item.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.lokasi.toLowerCase().includes(searchQuery.toLowerCase())
-  )
+    if (perangkatId) {
+      // Jika ada perangkatId, ambil data perangkat spesifik
+      data = inventarisData[`${id}-${perangkatId}`] || inventarisData.default
+      items = data.items || []
+    } else {
+      // Jika tidak ada perangkatId, gabungkan semua perangkat dari lokasi
+      const lokasiName = id === '1' ? 'Stasiun Lempuyangan' : 'Stasiun Tugu Yogyakarta'
+      const allPerangkatKeys = Object.keys(inventarisData).filter(key => key.startsWith(`${id}-`))
+      
+      // Gabungkan semua items dari semua perangkat
+      items = allPerangkatKeys.flatMap(key => inventarisData[key].items || [])
+      
+      data = {
+        perangkatNama: 'Semua Perangkat',
+        lokasiNama: lokasiName,
+        items: items
+      }
+    }
+
+    // Hitung total, aktif, nonAktif dari items
+    const total = items.length
+    const aktif = items.filter(item => item.status === 'aktif').length
+    const nonAktif = total - aktif
+
+    setCurrentData({
+      ...data,
+      total,
+      aktif,
+      nonAktif
+    })
+    setAllItems(items)
+  }, [id, perangkatId])
+
+  // Extract unique jenis perangkat untuk filter
+  const uniquePerangkat = [...new Set(allItems.map(item => item.jenis))].filter(Boolean)
+
+  // Filter items berdasarkan search, perangkat, dan status
+  const filteredItems = allItems.filter(item => {
+    const matchSearch = item.nama.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        item.lokasi.toLowerCase().includes(searchQuery.toLowerCase())
+    const matchPerangkat = filterPerangkat === 'all' || item.jenis === filterPerangkat
+    const matchStatus = filterStatus === 'all' || item.status === filterStatus
+    
+    return matchSearch && matchPerangkat && matchStatus
+  })
 
   const handleAddItem = () => {
     setFormData({ nama: '', lokasi: '', status: 'aktif' })
@@ -188,14 +233,14 @@ function DetailInventaris() {
     }
   }
 
-  if (!currentData || currentData.items.length === 0) {
+  if (!currentData) {
     return (
       <div className="detail-inventaris-container">
         <div className="inventaris-header">
           <button className="back-btn" onClick={() => navigate(-1)}>
             <span>&lt;</span>
           </button>
-          <h1 className="inventaris-title">Data tidak ditemukan</h1>
+          <h1 className="inventaris-title">Memuat data...</h1>
         </div>
       </div>
     )
@@ -206,7 +251,9 @@ function DetailInventaris() {
       {/* Header */}
       <div className="inventaris-header">
         <button className="back-btn" onClick={() => navigate(-1)}>
-          <span>&lt;</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </button>
         <div className="header-info">
           <h1 className="inventaris-title">{currentData.perangkatNama}</h1>
@@ -216,7 +263,51 @@ function DetailInventaris() {
 
       {/* Main Content */}
       <div className="inventaris-content">
-        {/* Left Section - List */}
+        {/* Stats Section */}
+        <div className="inventaris-stats-section">
+          <div className="inventaris-stat-card">
+            <div className="inventaris-stat-icon total">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="3" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
+                <rect x="14" y="3" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
+                <rect x="14" y="14" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
+                <rect x="3" y="14" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            </div>
+            <div className="inventaris-stat-info">
+              <p className="inventaris-stat-label">Total</p>
+              <p className="inventaris-stat-value">{currentData.total}</p>
+            </div>
+          </div>
+
+          <div className="inventaris-stat-card">
+            <div className="inventaris-stat-icon aktif">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                <polyline points="22 4 12 14.01 9 11.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </div>
+            <div className="inventaris-stat-info">
+              <p className="inventaris-stat-label">Aktif</p>
+              <p className="inventaris-stat-value">{currentData.aktif}</p>
+            </div>
+          </div>
+
+          <div className="inventaris-stat-card">
+            <div className="inventaris-stat-icon nonaktif">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                <line x1="12" y1="8" x2="12" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+              </svg>
+            </div>
+            <div className="inventaris-stat-info">
+              <p className="inventaris-stat-label">Non-Aktif</p>
+              <p className="inventaris-stat-value">{currentData.nonAktif}</p>
+            </div>
+          </div>
+        </div>
+
+        {/* List Section */}
         <div className="inventaris-list-section">
           <div className="list-header">
             <h2 className="list-title">Daftar Item</h2>
@@ -226,15 +317,47 @@ function DetailInventaris() {
             </button>
           </div>
 
-          {/* Search Bar */}
-          <div className="search-bar">
-            <input
-              type="text"
-              placeholder="Cari nama atau lokasi..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="search-input"
-            />
+          {/* Filter Controls */}
+          <div className="filter-controls">
+            <div className="filter-group">
+              <label className="filter-label">Cari</label>
+              <input
+                type="text"
+                placeholder="Cari nama atau lokasi..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="filter-input"
+              />
+            </div>
+            
+            {!perangkatId && uniquePerangkat.length > 0 && (
+              <div className="filter-group">
+                <label className="filter-label">Jenis Perangkat</label>
+                <select
+                  value={filterPerangkat}
+                  onChange={(e) => setFilterPerangkat(e.target.value)}
+                  className="filter-select"
+                >
+                  <option value="all">Semua Perangkat</option>
+                  {uniquePerangkat.map(jenis => (
+                    <option key={jenis} value={jenis}>{jenis}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+            
+            <div className="filter-group">
+              <label className="filter-label">Status</label>
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="filter-select"
+              >
+                <option value="all">Semua Status</option>
+                <option value="aktif">Aktif</option>
+                <option value="tidak_aktif">Tidak Aktif</option>
+              </select>
+            </div>
           </div>
 
           {/* Table */}
@@ -260,89 +383,87 @@ function DetailInventaris() {
                         </span>
                       </td>
                       <td className="aksi-cell">
-                        <button 
-                          className="action-btn edit-btn"
-                          onClick={() => handleEditItem(item)}
-                          title="Edit"
-                        >
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </button>
-                        <button 
-                          className="action-btn delete-btn"
-                          onClick={() => handleDeleteItem(item.id)}
-                          title="Delete"
-                        >
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                            <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></polyline>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></path>
-                            <line x1="10" y1="11" x2="10" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></line>
-                            <line x1="14" y1="11" x2="14" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"></line>
-                          </svg>
-                        </button>
+                        {/* Desktop: 2 buttons */}
+                        <div className="action-buttons-desktop">
+                          <button 
+                            className="action-btn edit-btn"
+                            onClick={() => handleEditItem(item)}
+                            title="Edit"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                              <path d="M12 20h9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <span>Edit</span>
+                          </button>
+                          <button 
+                            className="action-btn delete-btn"
+                            onClick={() => handleDeleteItem(item.id)}
+                            title="Hapus"
+                          >
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                              <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <line x1="10" y1="11" x2="10" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <line x1="14" y1="11" x2="14" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <span>Hapus</span>
+                          </button>
+                        </div>
+
+                        {/* Mobile: 1 button with dropdown */}
+                        <div className="action-menu-wrapper">
+                          <button 
+                            className="action-menu-btn"
+                            onClick={() => setActiveMenuId(activeMenuId === item.id ? null : item.id)}
+                          >
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                            <span>Edit</span>
+                          </button>
+                          
+                          {activeMenuId === item.id && (
+                            <div className="action-dropdown">
+                              <button 
+                                className="dropdown-item edit-item"
+                                onClick={() => {
+                                  handleEditItem(item)
+                                  setActiveMenuId(null)
+                                }}
+                              >
+                                Edit
+                              </button>
+                              <button 
+                                className="dropdown-item delete-item"
+                                onClick={() => {
+                                  handleDeleteItem(item.id)
+                                  setActiveMenuId(null)
+                                }}
+                              >
+                                Hapus
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="4" className="empty-state">Tidak ada data</td>
+                    <td colSpan="5" className="empty-state">Tidak ada data</td>
                   </tr>
                 )}
               </tbody>
             </table>
           </div>
         </div>
-
-        {/* Right Section - Stats */}
-        <div className="inventaris-stats-section">
-          <div className="stat-card">
-            <div className="stat-icon total">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <rect x="3" y="3" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
-                <rect x="14" y="3" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
-                <rect x="14" y="14" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
-                <rect x="3" y="14" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
-              </svg>
-            </div>
-            <div className="stat-info">
-              <p className="stat-label">Total</p>
-              <p className="stat-value">{currentData.total}</p>
-            </div>
-          </div>
-
-          <div className="stat-card">
-            <div className="stat-icon aktif">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <polyline points="22 4 12 14.01 9 11.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <div className="stat-info">
-              <p className="stat-label">Aktif</p>
-              <p className="stat-value">{currentData.aktif}</p>
-            </div>
-          </div>
-
-          <div className="stat-card">
-            <div className="stat-icon nonaktif">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                <line x1="12" y1="8" x2="12" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-              </svg>
-            </div>
-            <div className="stat-info">
-              <p className="stat-label">Non-Aktif</p>
-              <p className="stat-value">{currentData.nonAktif}</p>
-            </div>
-          </div>
-        </div>
       </div>
 
       {/* Add/Edit Modal */}
       {(showAddModal || showEditModal) && (
-        <div className="modal-overlay" onClick={() => {
+        <div className="inventaris-modal-overlay" onClick={() => {
           setShowAddModal(false)
           setShowEditModal(false)
         }}>
@@ -368,6 +489,17 @@ function DetailInventaris() {
                   placeholder="Masukkan nama perangkat"
                   value={formData.nama}
                   onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
+                  className="form-input"
+                />
+              </div>
+
+              <div className="form-group">
+                <label> Perangkat</label>
+                <input
+                  type="text"
+                  placeholder="Masukkan jenis perangkat"
+                  value={formData.jenis}
+                  onChange={(e) => setFormData({ ...formData, jenis: e.target.value })}
                   className="form-input"
                 />
               </div>

@@ -57,7 +57,7 @@ function App() {
           } 
         />
         <Route 
-          path="/location/:id/perangkat/:perangkatId" 
+          path="/location/:id/inventory" 
           element={
             isAuthenticated ? 
             <DetailInventaris /> : 
