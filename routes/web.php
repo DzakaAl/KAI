@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssetController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,9 @@ Route::get('/',function(){
     ]);
 });
 Route::get('/login', function () {
+      if(Auth::check()){
+        return redirect()->route('dashboard');
+    }
     return view('login', [
         'title' => 'Kereta Api Indonesia',
         'host' => 'http://kai.go.id'
@@ -35,4 +39,7 @@ Route::get('/tes',function(){
     return view('welcome');
 });
 
+Route::middleware(['auth'])->group(function () {
+    Route::resource('asset', AssetController::class);
+});
 

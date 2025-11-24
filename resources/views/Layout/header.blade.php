@@ -23,7 +23,7 @@
             id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 
       <img src="{{ asset("image/profile/profile.png ") }}" alt="profile" class="rounded-circle" width="35" height="35">
-      <span class="fw-bold">{{ $user->name }}</span>
+      <span class="fw-bold">{{ Auth::user()->name  }}</span>
 
     </button>
 
@@ -31,6 +31,7 @@
       <li><a class="dropdown-item" href="{{ route('profile') }}">👤 Akun</a></li>
       <li><a class="dropdown-item" href="/monitoring">📊 Monitoring</a></li>
       <li><a class="dropdown-item" href="{{ route('dashboard') }}">🛠️ Aset</a></li>
+      <li><a class="dropdown-item" href="{{ route('asset.index') }}">🧾 CRUD Aset</a></li>
       <li><hr class="dropdown-divider"></li>
       <li><a class="dropdown-item text-danger fw-bold" href="{{ route('logout') }}">🚪 Logout</a></li>
     </ul>
@@ -47,6 +48,7 @@
     <div class="container d-flex justify-content-around">
       <a class="nav-link active text-center" href="{{ route('dashboard') }}">🏠<br><small>Home</small></a>
       <a class="nav-link text-center" href="/monitoring">📊<br><small>Monitoring</small></a>
+    <a class="nav-link text-center" href="{{ route('asset.index') }}">🧾<br><small>CRUD</small></a> <!-- DITAMBAHKAN -->
       <a class="nav-link text-center" href="{{ route('dashboard') }}">🛠️<br><small>Aset</small></a>
       <a class="nav-link text-center" href="{{ route('profile') }}">🚪<br><small>Akun</small></a>
     </div>
