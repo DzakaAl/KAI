@@ -5,18 +5,12 @@ import './DetailAset.css'
 function DetailAset() {
   const navigate = useNavigate()
   const { id } = useParams()
-  const [showDetailModal, setShowDetailModal] = useState(false)
-  const [showEditMenu, setShowEditMenu] = useState(false)
-  const [showEditModal, setShowEditModal] = useState(false)
-  const [editMode, setEditMode] = useState(null) // 'foto', 'jumlah', 'status'
-  const [editData, setEditData] = useState({})
-  const [localData, setLocalData] = useState(null)
   const [selectedPerangkat, setSelectedPerangkat] = useState(null)
   const [showPerangkatPopup, setShowPerangkatPopup] = useState(false)
 
   // Control body overflow ketika popup muncul
   useEffect(() => {
-    if (showEditModal || showPerangkatPopup) {
+    if (showPerangkatPopup) {
       document.body.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = 'unset'
@@ -25,7 +19,7 @@ function DetailAset() {
     return () => {
       document.body.style.overflow = 'unset'
     }
-  }, [showEditModal, showPerangkatPopup])
+  }, [showPerangkatPopup])
 
   // Data lokasi berdasarkan ID
   const locationData = {
@@ -55,7 +49,7 @@ function DetailAset() {
     },
     2: {
       name: 'Stasiun Tugu Yogyakarta',
-      image: 'https://images.unsplash.com/photo-1561361513-e8d53f0e6f67?w=500&h=300&fit=crop',
+      image: 'https://assets.telkomsel.com/public/2025-02/Mengenal-6-Stasiun-Yogyakarta-yang-Bersejarah.jpg?VersionId=TS3XgYVifrRd.Oz_N7tGYe6YYKEf_ngJ',
       totalPerangkat: 250,
       aktif: 210,
       nonAktif: 40,
@@ -167,53 +161,7 @@ function DetailAset() {
     }
   }
 
-  const data = localData || locationData[id] || locationData[1]
-
-  const handleEditClick = (mode) => {
-    setEditMode(mode)
-    setShowEditModal(true)
-    setShowEditMenu(false)
-    
-    if (mode === 'foto') {
-      setEditData({ image: data.image })
-    } else if (mode === 'jumlah') {
-      setEditData({ 
-        totalPerangkat: data.totalPerangkat,
-        aktif: data.aktif,
-        nonAktif: data.nonAktif
-      })
-    } else if (mode === 'status') {
-      setEditData({ 
-        perangkat: data.perangkat.map(p => ({ ...p }))
-      })
-    }
-  }
-
-  const handleSaveEdit = () => {
-    const updatedData = { ...data, ...editData }
-    if (editMode === 'jumlah') {
-      updatedData.perangkat = data.perangkat
-    }
-    setLocalData(updatedData)
-    setShowEditModal(false)
-    setEditMode(null)
-  }
-
-  const handleInputChange = (field, value) => {
-    setEditData(prev => ({
-      ...prev,
-      [field]: value
-    }))
-  }
-
-  const handlePerangkatChange = (perangkatId, field, value) => {
-    setEditData(prev => ({
-      ...prev,
-      perangkat: prev.perangkat.map(p => 
-        p.id === perangkatId ? { ...p, [field]: value } : p
-      )
-    }))
-  }
+  const data = locationData[id] || locationData[1]
 
   const handlePerangkatClick = (perangkat) => {
     setSelectedPerangkat(perangkat)
@@ -230,35 +178,6 @@ function DetailAset() {
           </svg>
         </button>
         <h1>{data.name}</h1>
-        
-        {/* Edit Menu Button */}
-        <div className="header-menu-container">
-          <button 
-            className="menu-button"
-            onClick={() => setShowEditMenu(!showEditMenu)}
-            title="Edit"
-          >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="5" r="2" fill="currentColor"/>
-              <circle cx="12" cy="12" r="2" fill="currentColor"/>
-              <circle cx="12" cy="19" r="2" fill="currentColor"/>
-            </svg>
-          </button>
-          
-          {showEditMenu && (
-            <div className="dropdown-menu">
-              <button onClick={() => handleEditClick('foto')} className="menu-item">
-                <span>📷</span> Update Foto
-              </button>
-              <button onClick={() => handleEditClick('jumlah')} className="menu-item">
-                <span>📦</span> Edit Jumlah Perangkat
-              </button>
-              <button onClick={() => handleEditClick('status')} className="menu-item">
-                <span>✓</span> Edit Status
-              </button>
-            </div>
-          )}
-        </div>
       </div>
 
       {/* Main Content */}
@@ -273,7 +192,12 @@ function DetailAset() {
 
           <div className="stats-section">
             <div className="stat-card total">
-              <div className="stat-icon">📦</div>
+              <div className="stat-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                  <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" strokeWidth="2"/>
+                  <path d="M9 9h6M9 15h6" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
               <div className="stat-info">
                 <div className="stat-label">Total Perangkat</div>
                 <div className="stat-value">{data.totalPerangkat}</div>
@@ -281,7 +205,12 @@ function DetailAset() {
             </div>
 
             <div className="stat-card aktif">
-              <div className="stat-icon">✓</div>
+              <div className="stat-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                  <path d="M9 12l2 2 4-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
               <div className="stat-info">
                 <div className="stat-label">Aktif</div>
                 <div className="stat-value">{data.aktif}</div>
@@ -289,7 +218,12 @@ function DetailAset() {
             </div>
 
             <div className="stat-card non-aktif">
-              <div className="stat-icon">⚠</div>
+              <div className="stat-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+                  <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+                  <path d="M12 8v4M12 16h.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
               <div className="stat-info">
                 <div className="stat-label">Non-Aktif</div>
                 <div className="stat-value">{data.nonAktif}</div>
@@ -304,12 +238,8 @@ function DetailAset() {
             <h2>Daftar Perangkat</h2>
             <button 
               className="detail-button"
-              onClick={() => setShowDetailModal(!showDetailModal)}
+              onClick={() => navigate(`/location/${id}/inventory`)}
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
               Lihat Detail
             </button>
           </div>
@@ -319,153 +249,19 @@ function DetailAset() {
               <div 
                 key={item.id} 
                 className="perangkat-card"
+                onClick={() => handlePerangkatClick(item)}
               >
-                <div className="perangkat-name">{item.nama}</div>
-                <div className="perangkat-jumlah">{item.aktif + item.tidakAktif} unit</div>
-                <div className="perangkat-actions">
-                  <button 
-                    className="detail-btn"
-                    onClick={() => navigate(`/location/${id}/perangkat/${item.id}`)}
-                    title="Lihat Detail Inventaris"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </button>
-                  <button 
-                    className="popup-btn"
-                    onClick={() => {
-                      setSelectedPerangkat(item)
-                      setShowPerangkatPopup(true)
-                    }}
-                    title="Info Perangkat"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
-                      <line x1="12" y1="16" x2="12" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                      <line x1="12" y1="8" x2="12.01" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
-                    </svg>
-                  </button>
+                <div className="perangkat-info">
+                  <div className="perangkat-details">
+                    <p className="perangkat-name">{item.nama}</p>
+                    <p className="perangkat-jumlah">{item.aktif + item.tidakAktif} unit</p>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
-
-      {/* Edit Modal */}
-      {showEditModal && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h2>
-                {editMode === 'foto' && 'Update Foto'}
-                {editMode === 'jumlah' && 'Edit Jumlah Perangkat'}
-                {editMode === 'status' && 'Edit Status Perangkat'}
-              </h2>
-              <button 
-                className="modal-close"
-                onClick={() => setShowEditModal(false)}
-              >
-                ✕
-              </button>
-            </div>
-
-            <div className="modal-body">
-              {editMode === 'foto' && (
-                <div className="edit-form">
-                  <div className="form-group">
-                    <label>URL Foto</label>
-                    <input 
-                      type="text"
-                      value={editData.image || ''}
-                      onChange={(e) => handleInputChange('image', e.target.value)}
-                      placeholder="Masukkan URL foto..."
-                    />
-                  </div>
-                  <div className="image-preview">
-                    <img src={editData.image || data.image} alt="Preview" />
-                  </div>
-                </div>
-              )}
-
-              {editMode === 'jumlah' && (
-                <div className="edit-form">
-                  <div className="form-group">
-                    <label>Total Perangkat</label>
-                    <input 
-                      type="number"
-                      value={editData.totalPerangkat || 0}
-                      onChange={(e) => handleInputChange('totalPerangkat', parseInt(e.target.value))}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Aktif</label>
-                    <input 
-                      type="number"
-                      value={editData.aktif || 0}
-                      onChange={(e) => handleInputChange('aktif', parseInt(e.target.value))}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label>Non-Aktif</label>
-                    <input 
-                      type="number"
-                      value={editData.nonAktif || 0}
-                      onChange={(e) => handleInputChange('nonAktif', parseInt(e.target.value))}
-                    />
-                  </div>
-                </div>
-              )}
-
-              {editMode === 'status' && (
-                <div className="edit-form">
-                  <div className="perangkat-edit-list">
-                    {editData.perangkat && editData.perangkat.map(item => (
-                      <div key={item.id} className="perangkat-edit-item">
-                        <div className="form-group">
-                          <label>{item.nama}</label>
-                          <div className="edit-controls">
-                            <input 
-                              type="number"
-                              value={item.jumlah || 0}
-                              onChange={(e) => handlePerangkatChange(item.id, 'jumlah', parseInt(e.target.value))}
-                              placeholder="Jumlah"
-                            />
-                            <select 
-                              value={item.status || 'aktif'}
-                              onChange={(e) => handlePerangkatChange(item.id, 'status', e.target.value)}
-                            >
-                              <option value="aktif">Aktif</option>
-                              <option value="tidak_aktif">Tidak Aktif</option>
-                            </select>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="modal-footer">
-              <button 
-                className="btn-cancel"
-                onClick={() => setShowEditModal(false)}
-              >
-                Batal
-              </button>
-              <button 
-                className="btn-save"
-                onClick={handleSaveEdit}
-              >
-                Simpan
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Perangkat Detail Popup */}
       {showPerangkatPopup && selectedPerangkat && (
