@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import Login from './components/login/Login'
-import Register from './components/register/Register'
-import Home from './components/home/Home'
-import DetailAset from './components/locationDetail/LocationDetail'
-import DetailInventaris from './components/detailAsset/DetailAsset'
+import Login from './pages/Login/Login'
+import Register from './pages/Register/Register'
+import Home from './pages/Home/Home'
+import DetailAset from './pages/LocationDetail/LocationDetail'
+import DetailInventaris from './pages/DetailAsset/DetailAsset'
 import './App.css'
 
 function App() {

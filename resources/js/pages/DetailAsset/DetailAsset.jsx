@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { Button, Badge, Input, Modal } from '../../components'
 import './DetailAsset.css'
 
 function DetailInventaris() {
@@ -7,6 +8,8 @@ function DetailInventaris() {
   const { id, perangkatId } = useParams()
   const [showAddModal, setShowAddModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [itemToDelete, setItemToDelete] = useState(null)
   const [editingItem, setEditingItem] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterPerangkat, setFilterPerangkat] = useState('all')
@@ -227,10 +230,24 @@ function DetailInventaris() {
   }
 
   const handleDeleteItem = (itemId) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus item ini?')) {
-      setAllItems(allItems.filter(item => item.id !== itemId))
-      console.log('Delete item:', itemId)
+    const item = allItems.find(i => i.id === itemId)
+    setItemToDelete(item)
+    setShowDeleteModal(true)
+  }
+
+  const confirmDelete = () => {
+    if (itemToDelete) {
+      setAllItems(allItems.filter(item => item.id !== itemToDelete.id))
+      console.log('Delete item:', itemToDelete.id)
+      setShowDeleteModal(false)
+      setItemToDelete(null)
+      setActiveMenuId(null)
     }
+  }
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false)
+    setItemToDelete(null)
   }
 
   if (!currentData) {
@@ -311,22 +328,35 @@ function DetailInventaris() {
         <div className="Detail-list-section">
           <div className="list-header">
             <h2 className="list-title">Daftar Item</h2>
-            <button className="add-btn" onClick={handleAddItem}>
-              <span className="plus-icon">+</span>
-              <span className="add-text">Tambah</span>
-            </button>
+            <Button 
+              variant="success" 
+              size="medium"
+              onClick={handleAddItem}
+              icon={
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              }
+            >
+              Tambah
+            </Button>
           </div>
 
           {/* Filter Controls */}
           <div className="filter-controls">
             <div className="filter-group">
-              <label className="filter-label">Cari</label>
-              <input
+              <Input
                 type="text"
+                label="Cari"
                 placeholder="Cari nama atau lokasi..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="filter-input"
+                leftIcon={
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
+                    <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2"/>
+                  </svg>
+                }
               />
             </div>
             
@@ -378,37 +408,42 @@ function DetailInventaris() {
                       <td className="nama-cell">{item.nama}</td>
                       <td className="lokasi-cell">{item.lokasi}</td>
                       <td className="status-cell">
-                        <span className={`status-badge ${item.status}`}>
+                        <Badge 
+                          variant={item.status === 'aktif' ? 'success' : 'danger'}
+                          dot
+                        >
                           {item.status === 'aktif' ? 'Aktif' : 'Tidak Aktif'}
-                        </span>
+                        </Badge>
                       </td>
                       <td className="aksi-cell">
                         {/* Desktop: 2 buttons */}
                         <div className="action-buttons-desktop">
-                          <button 
-                            className="action-btn edit-btn"
+                          <Button
+                            variant="secondary"
+                            size="small"
                             onClick={() => handleEditItem(item)}
-                            title="Edit"
+                            icon={
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 20h9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            }
                           >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                              <path d="M12 20h9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            <span>Edit</span>
-                          </button>
-                          <button 
-                            className="action-btn delete-btn"
+                            Edit
+                          </Button>
+                          <Button
+                            variant="danger"
+                            size="small"
                             onClick={() => handleDeleteItem(item.id)}
-                            title="Hapus"
+                            icon={
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            }
                           >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                              <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              <line x1="10" y1="11" x2="10" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              <line x1="14" y1="11" x2="14" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            <span>Hapus</span>
-                          </button>
+                            Hapus
+                          </Button>
                         </div>
 
                         {/* Mobile: 1 button with dropdown */}
@@ -462,92 +497,131 @@ function DetailInventaris() {
       </div>
 
       {/* Add/Edit Modal */}
-      {(showAddModal || showEditModal) && (
-        <div className="Detail-modal-overlay" onClick={() => {
+      <Modal
+        isOpen={showAddModal || showEditModal}
+        onClose={() => {
           setShowAddModal(false)
           setShowEditModal(false)
-        }}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>{editingItem ? 'Edit Item' : 'Tambah Item'}</h2>
-              <button 
-                className="modal-close"
-                onClick={() => {
-                  setShowAddModal(false)
-                  setShowEditModal(false)
-                }}
-              >
-                ✕
-              </button>
-            </div>
+        }}
+        title={editingItem ? 'Edit Item' : 'Tambah Item'}
+        size="medium"
+        footer={
+          <>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setShowAddModal(false)
+                setShowEditModal(false)
+              }}
+            >
+              Batal
+            </Button>
+            <Button
+              variant="success"
+              onClick={handleSaveItem}
+            >
+              Simpan
+            </Button>
+          </>
+        }
+      >
+        <div className="modal-body">
+          <Input
+            label="Nama Perangkat"
+            placeholder="Masukkan nama perangkat"
+            value={formData.nama}
+            onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
+          />
 
-            <div className="modal-body">
-              <div className="form-group">
-                <label>Nama Perangkat</label>
-                <input
-                  type="text"
-                  placeholder="Masukkan nama perangkat"
-                  value={formData.nama}
-                  onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
-                  className="form-input"
-                />
-              </div>
+          <Input
+            label="Jenis Perangkat"
+            placeholder="Masukkan jenis perangkat"
+            value={formData.jenis}
+            onChange={(e) => setFormData({ ...formData, jenis: e.target.value })}
+          />
 
-              <div className="form-group">
-                <label> Perangkat</label>
-                <input
-                  type="text"
-                  placeholder="Masukkan jenis perangkat"
-                  value={formData.jenis}
-                  onChange={(e) => setFormData({ ...formData, jenis: e.target.value })}
-                  className="form-input"
-                />
-              </div>
+          <Input
+            label="Lokasi"
+            placeholder="Masukkan lokasi"
+            value={formData.lokasi}
+            onChange={(e) => setFormData({ ...formData, lokasi: e.target.value })}
+          />
 
-              <div className="form-group">
-                <label>Lokasi</label>
-                <input
-                  type="text"
-                  placeholder="Masukkan lokasi"
-                  value={formData.lokasi}
-                  onChange={(e) => setFormData({ ...formData, lokasi: e.target.value })}
-                  className="form-input"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Status</label>
-                <select
-                  value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                  className="form-select"
-                >
-                  <option value="aktif">Aktif</option>
-                  <option value="tidak_aktif">Tidak Aktif</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="modal-footer">
-              <button 
-                className="btn-cancel"
-                onClick={() => {
-                  setShowAddModal(false)
-                  setShowEditModal(false)
-                }}
-              >
-                Batal
-              </button>
-              <button 
-                className="btn-save"
-                onClick={handleSaveItem}
-              >
-                Simpan
-              </button>
-            </div>
+          <div className="form-group">
+            <label>Status</label>
+            <select
+              value={formData.status}
+              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+              className="form-select"
+              style={{ 
+                width: '100%', 
+                padding: '10px 12px', 
+                border: '1px solid #e5e7eb',
+                borderRadius: '8px',
+                fontSize: '14px',
+                marginTop: '4px'
+              }}
+            >
+              <option value="aktif">Aktif</option>
+              <option value="tidak_aktif">Tidak Aktif</option>
+            </select>
           </div>
         </div>
-      )}
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={cancelDelete}
+        title="Konfirmasi Hapus"
+        size="small"
+        footer={
+          <>
+            <Button
+              variant="ghost"
+              onClick={cancelDelete}
+            >
+              Batal
+            </Button>
+            <Button
+              variant="danger"
+              onClick={confirmDelete}
+              icon={
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              }
+            >
+              Hapus
+            </Button>
+          </>
+        }
+      >
+        {itemToDelete && (
+          <div style={{ padding: '10px 0' }}>
+            <p style={{ marginBottom: '15px', color: 'var(--text-main)' }}>
+              Apakah Anda yakin ingin menghapus item ini?
+            </p>
+            <div style={{ 
+              background: 'var(--gray-50)', 
+              padding: '12px', 
+              borderRadius: '8px',
+              border: '1px solid var(--border-light)'
+            }}>
+              <p style={{ margin: '0 0 8px 0', fontWeight: '600', color: 'var(--text-main)' }}>
+                {itemToDelete.nama}
+              </p>
+              <p style={{ margin: '0', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                Lokasi: {itemToDelete.lokasi}
+              </p>
+            </div>
+            <p style={{ marginTop: '15px', fontSize: '13px', color: 'var(--text-muted)' }}>
+              Tindakan ini tidak dapat dibatalkan.
+            </p>
+          </div>
+        )}
+      </Modal>
     </div>
   )
 }

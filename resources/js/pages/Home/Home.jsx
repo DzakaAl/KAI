@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import { useNavigate } from 'react-router-dom'
+import { Button } from '../../components'
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import './Home.css'
@@ -211,7 +212,23 @@ function Home({ user, onLogout }) {
           </button>
           {menuOpen && (
             <div className="dropdown-menu">
-              <button onClick={onLogout}>Logout</button>
+              <div className="profile-info">
+                <div className="profile-avatar">
+                  <img width="32" height="32" src="/image/avatar.jpg" alt="User Avatar" />
+                </div>
+                <div className="profile-details">
+                  <p className="profile-name">{welcomeName}</p>
+                  <p className="profile-email">{user?.email || 'user@kai.id'}</p>
+                </div>
+              </div>
+              <button className="logout-btn" onClick={onLogout}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <polyline points="16 17 21 12 16 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Logout
+              </button>
             </div>
           )}
         </div>
@@ -302,38 +319,37 @@ function Home({ user, onLogout }) {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="mobile-search-input"
           />
-          <div className="profile-menu-wrapper-mobile">
-            <button className="profile-mobile-btn-map" onClick={() => setProfileMenuOpen(!profileMenuOpen)}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </button>
-            {profileMenuOpen && (
-              <div className="profile-dropdown-map">
-                <div className="profile-info">
-                  <div className="profile-avatar">
-                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                      <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    </svg>
-                  </div>
-                  <div className="profile-details">
-                    <p className="profile-name">{welcomeName}</p>
-                    <p className="profile-email">{user?.email || 'user@kai.id'}</p>
-                  </div>
+        </div>
+
+        {/* Mobile Profile Button - Separate */}
+        <div className="profile-menu-wrapper-mobile">
+          <button className="profile-mobile-btn-map" onClick={() => setProfileMenuOpen(!profileMenuOpen)}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              <circle cx="12" cy="7" r="4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+          {profileMenuOpen && (
+            <div className="profile-dropdown-map">
+              <div className="profile-info">
+                <div className="profile-avatar">
+                  <img width="48" height="48" src="/image/avatar.jpg" alt="User Avatar" />
                 </div>
-                <button className="logout-btn" onClick={onLogout}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <polyline points="16 17 21 12 16 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                    <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  Logout
-                </button>
+                <div className="profile-details">
+                  <p className="profile-name">{welcomeName}</p>
+                  <p className="profile-email">{user?.email || 'user@kai.id'}</p>
+                </div>
               </div>
-            )}
-          </div>
+              <button className="logout-btn" onClick={onLogout}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <polyline points="16 17 21 12 16 7" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                Logout
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Mobile Search Results List */}
@@ -476,12 +492,14 @@ function Home({ user, onLogout }) {
                     <div className="stat-label">Total Perangkat:</div>
                     <div className="stat-value">{location.totalPerangkat}</div>
                   </div>
-                  <button 
-                    className="popup-button"
+                  <Button 
+                    variant="primary"
+                    size="small"
+                    fullWidth
                     onClick={() => navigate(`/location/${location.id}`)}
                   >
                     Lihat Selengkapnya...
-                  </button>
+                  </Button>
                 </div>
               </Popup>
             </Marker>

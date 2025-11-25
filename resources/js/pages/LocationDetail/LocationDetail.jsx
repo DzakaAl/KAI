@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import { Button, Card, Badge, Modal } from '../../components'
 import './LocationDetail.css'
 
 function DetailAset() {
@@ -236,12 +237,13 @@ function DetailAset() {
         <div className="daftar-perangkat-section">
           <div className="section-header">
             <h2>Daftar Perangkat</h2>
-            <button 
-              className="detail-button"
+            <Button 
+              variant="primary"
+              size="medium"
               onClick={() => navigate(`/location/${id}/inventory`)}
             >
               Lihat Detail
-            </button>
+            </Button>
           </div>
 
           <div className="perangkat-grid">
@@ -263,53 +265,64 @@ function DetailAset() {
         </div>
       </div>
 
-      {/* Perangkat Detail Popup */}
-      {showPerangkatPopup && selectedPerangkat && (
-        <div className="modal-overlay" onClick={() => setShowPerangkatPopup(false)}>
-          <div className="perangkat-popup" onClick={(e) => e.stopPropagation()}>
-            <div className="popup-header">
-              <h3>{selectedPerangkat.nama}</h3>
-              <button 
-                className="popup-close"
-                onClick={() => setShowPerangkatPopup(false)}
-              >
-                ✕
-              </button>
+      {/* Perangkat Detail Modal */}
+      <Modal
+        isOpen={showPerangkatPopup}
+        onClose={() => setShowPerangkatPopup(false)}
+        title={selectedPerangkat?.nama}
+        size="medium"
+      >
+        {selectedPerangkat && (
+          <div className="popup-body">
+            <div className="popup-detail-item">
+              <div className="detail-label">Total Unit</div>
+              <div className="detail-value">{selectedPerangkat.aktif + selectedPerangkat.tidakAktif}</div>
             </div>
-            
-            <div className="popup-body">
-              <div className="popup-detail-item">
-                <div className="detail-label">Total Unit</div>
-                <div className="detail-value">{selectedPerangkat.aktif + selectedPerangkat.tidakAktif}</div>
-              </div>
 
-              <div className="popup-detail-grid">
-                <div className="popup-detail-item">
-                  <div className="detail-label">Aktif</div>
-                  <div className="detail-value aktif-count">{selectedPerangkat.aktif}</div>
-                </div>
-                <div className="popup-detail-item">
-                  <div className="detail-label">Tidak Aktif</div>
-                  <div className="detail-value nonaktif-count">{selectedPerangkat.tidakAktif}</div>
-                </div>
-              </div>
-
+            <div className="popup-detail-grid">
               <div className="popup-detail-item">
-                <div className="detail-label">Persentase Aktif</div>
-                <div className="progress-bar">
-                  <div 
-                    className={`progress-fill aktif`}
-                    style={{ width: `${((selectedPerangkat.aktif / (selectedPerangkat.aktif + selectedPerangkat.tidakAktif)) * 100)}%` }}
-                  ></div>
-                </div>
-                <div className="progress-text">
-                  {Math.round((selectedPerangkat.aktif / (selectedPerangkat.aktif + selectedPerangkat.tidakAktif)) * 100)}% aktif
-                </div>
+                <div className="detail-label">Aktif</div>
+                <Badge variant="success" size="large">{selectedPerangkat.aktif}</Badge>
+              </div>
+              <div className="popup-detail-item">
+                <div className="detail-label">Tidak Aktif</div>
+                <Badge variant="danger" size="large">{selectedPerangkat.tidakAktif}</Badge>
+              </div>
+            </div>
+
+            <div className="popup-detail-item">
+              <div className="detail-label">Persentase Aktif</div>
+              <div className="progress-bar" style={{
+                width: '100%',
+                height: '12px',
+                backgroundColor: 'var(--gray-200)',
+                borderRadius: '6px',
+                overflow: 'hidden',
+                marginTop: '8px'
+              }}>
+                <div 
+                  className="progress-fill"
+                  style={{ 
+                    width: `${((selectedPerangkat.aktif / (selectedPerangkat.aktif + selectedPerangkat.tidakAktif)) * 100)}%`,
+                    height: '100%',
+                    backgroundColor: 'var(--success)',
+                    transition: 'width 0.3s ease',
+                    borderRadius: '6px'
+                  }}
+                ></div>
+              </div>
+              <div className="progress-text" style={{
+                marginTop: '8px',
+                fontSize: '14px',
+                fontWeight: '500',
+                color: 'var(--text-secondary)'
+              }}>
+                {Math.round((selectedPerangkat.aktif / (selectedPerangkat.aktif + selectedPerangkat.tidakAktif)) * 100)}% aktif
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Modal>
     </div>
   )
 }
