@@ -54,6 +54,114 @@ function DetailInventaris() {
         { id: 20, nama: 'CCTV_20', lokasi: 'Peron 5', status: 'aktif', jenis: 'CCTV IP Camera' }
       ]
     },
+
+    // New entries for Kantor Daop 6
+    '3-1': { // Kantor Daop 6 - CCTV IP Camera
+      perangkatNama: 'CCTV IP Camera',
+      lokasiNama: 'Kantor Daop 6 Yogyakarta',
+      total: 8,
+      aktif: 7,
+      nonAktif: 1,
+      items: [
+        { id: 1, nama: 'CCTV_D6_01', lokasi: 'Lobby Utama', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 2, nama: 'CCTV_D6_02', lokasi: 'Ruang Rapat', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 3, nama: 'CCTV_D6_03', lokasi: 'Koridor Selatan', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 4, nama: 'CCTV_D6_04', lokasi: 'Koridor Utara', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 5, nama: 'CCTV_D6_05', lokasi: 'Pintu Masuk Belakang', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 6, nama: 'CCTV_D6_06', lokasi: 'Parkiran', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 7, nama: 'CCTV_D6_07', lokasi: 'Gudang', status: 'tidak_aktif', jenis: 'CCTV IP Camera' },
+        { id: 8, nama: 'CCTV_D6_08', lokasi: 'Tangga Darurat', status: 'aktif', jenis: 'CCTV IP Camera' }
+      ]
+    },
+    '3-2': { // Kantor Daop 6 - NVR Server
+      perangkatNama: 'NVR Server',
+      lokasiNama: 'Kantor Daop 6 Yogyakarta',
+      total: 1,
+      aktif: 1,
+      nonAktif: 0,
+      items: [
+        { id: 1, nama: 'NVR_D6_01', lokasi: 'Ruang Server', status: 'aktif', jenis: 'NVR Server' }
+      ]
+    },
+    '3-3': { // Kantor Daop 6 - Core Switch
+      perangkatNama: 'Core Switch',
+      lokasiNama: 'Kantor Daop 6 Yogyakarta',
+      total: 1,
+      aktif: 1,
+      nonAktif: 0,
+      items: [
+        { id: 1, nama: 'CS_D6_01', lokasi: 'Ruang Server', status: 'aktif', jenis: 'Core Switch' }
+      ]
+    },
+    '3': { // Kantor Daop 6 - Semua Perangkat
+      perangkatNama: 'Semua Perangkat',
+      lokasiNama: 'Kantor Daop 6 Yogyakarta',
+      items: [] // Will be populated dynamically similar to existing pattern
+    },
+
+    // New entries for Gudang Logistik
+    '4-1': { // Gudang Logistik - CCTV IP Camera
+      perangkatNama: 'CCTV IP Camera',
+      lokasiNama: 'Gudang Logistik  Yogyakarta',
+      total: 5,
+      aktif: 5,
+      nonAktif: 0,
+      items: [
+        { id: 1, nama: 'CCTV_GL_01', lokasi: 'Pintu Masuk Utama', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 2, nama: 'CCTV_GL_02', lokasi: 'Area Penataan Barang', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 3, nama: 'CCTV_GL_03', lokasi: 'Area Pengiriman', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 4, nama: 'CCTV_GL_04', lokasi: 'Parkiran', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 5, nama: 'CCTV_GL_05', lokasi: 'Gudang Penyimpanan', status: 'aktif', jenis: 'CCTV IP Camera' }
+      ]
+    },
+    '4-2': { // Gudang Logistik - Access Point WiFi
+      perangkatNama: 'Access Point WiFi',
+      lokasiNama: 'Gudang Logistik  Yogyakarta',
+      total: 2,
+      aktif: 2,
+      nonAktif: 0,
+      items: [
+        { id: 1, nama: 'AP_GL_01', lokasi: 'Area Gudang', status: 'aktif', jenis: 'Access Point WiFi' },
+        { id: 2, nama: 'AP_GL_02', lokasi: 'Ruang Kerja', status: 'aktif', jenis: 'Access Point WiFi' }
+      ]
+    },
+    '4': { // Gudang Logistik - Semua Perangkat
+      perangkatNama: 'Semua Perangkat',
+      lokasiNama: 'Gudang Logistik  Yogyakarta',
+      items: []
+    },
+
+    // New entries for PJL Lempuyangan
+    '6-1': { // PJL Lempuyangan - CCTV IP Camera
+      perangkatNama: 'CCTV IP Camera',
+      lokasiNama: 'PJL Lempuyangan',
+      total: 6,
+      aktif: 6,
+      nonAktif: 0,
+      items: [
+        { id: 1, nama: 'CCTV_PJL_01', lokasi: 'Lobby Utama', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 2, nama: 'CCTV_PJL_02', lokasi: 'Area Parkir', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 3, nama: 'CCTV_PJL_03', lokasi: 'Koridor Utara', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 4, nama: 'CCTV_PJL_04', lokasi: 'Koridor Selatan', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 5, nama: 'CCTV_PJL_05', lokasi: 'Pintu Masuk', status: 'aktif', jenis: 'CCTV IP Camera' },
+        { id: 6, nama: 'CCTV_PJL_06', lokasi: 'Gudang', status: 'aktif', jenis: 'CCTV IP Camera' }
+      ]
+    },
+    '6-2': { // PJL Lempuyangan - NVR Server
+      perangkatNama: 'NVR Server',
+      lokasiNama: 'PJL Lempuyangan',
+      total: 1,
+      aktif: 1,
+      nonAktif: 0,
+      items: [
+        { id: 1, nama: 'NVR_PJL_01', lokasi: 'Ruang Server', status: 'aktif', jenis: 'NVR Server' }
+      ]
+    },
+    '6': { // PJL Lempuyangan - Semua Perangkat
+      perangkatNama: 'Semua Perangkat',
+      lokasiNama: 'PJL Lempuyangan',
+      items: []
+    },
     '1-2': { // Stasiun Lempuyangan - NVR Server
       perangkatNama: 'NVR Server',
       lokasiNama: 'Stasiun Lempuyangan',
@@ -152,7 +260,14 @@ function DetailInventaris() {
       items = data.items || []
     } else {
       // Jika tidak ada perangkatId, gabungkan semua perangkat dari lokasi
-      const lokasiName = id === '1' ? 'Stasiun Lempuyangan' : 'Stasiun Tugu Yogyakarta'
+      const lokasiNameMap = {
+        '1': 'Stasiun Lempuyangan',
+        '2': 'Stasiun Tugu Yogyakarta',
+        '3': 'Kantor Daop 6 Yogyakarta',
+        '4': 'Gudang Logistik Yogyakarta',
+        '6': 'PJL Lempuyangan',
+      }
+      const lokasiName = lokasiNameMap[id] || 'Lokasi Tidak Dikenal'
       const allPerangkatKeys = Object.keys(DetailData).filter(key => key.startsWith(`${id}-`))
       
       // Gabungkan semua items dari semua perangkat
