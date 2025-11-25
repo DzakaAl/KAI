@@ -8,16 +8,17 @@
 /* Header */
 .header {
   position: fixed;
-  top: 0;
-  left: 200px;
-  right: 0;
-  height: 80px;
+  top: 15px;
+  left: 220px;
+  right: 20px;
+  height: 70px;
   background: var(--bg);
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-lg);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 80px;
+  padding: 0 30px;
   z-index: 1000;
 }
 
@@ -39,22 +40,23 @@
 }
 
 .user-button {
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
-  background: var(--orange);
+  background: transparent;
   border: none;
-  color: white;
+  color:  var(--text-main);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .user-button:hover {
-  background: var(--orange-light);
-  transform: scale(1.05);
+  background: var(--gray-100);
+  border-color: var(--border-light);
 }
 
 .search-mobile-btn {
@@ -111,8 +113,6 @@
   top: 60px;
   right: 0;
   background: var(--bg);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xl);
   min-width: 260px;
   z-index: 2000;
   animation: slideDown 0.3s ease;
@@ -123,7 +123,6 @@
   display: flex;
   gap: 14px;
   padding: 16px;
-  background: linear-gradient(135deg, rgba(242, 105, 36, 0.03) 0%, rgba(242, 105, 36, 0.01) 100%);
   border-radius: 12px;
   margin-bottom: 8px;
 }
@@ -132,13 +131,20 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--secondary) 0%, #d45a1f 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(242, 105, 36, 0.25);
+  overflow: hidden;
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .profile-details {
@@ -205,11 +211,14 @@
   top: 55px;
   right: 0;
   background: var(--bg);
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  padding: 10px;
-  min-width: 150px;
-  animation: slideDown 0.3s ease;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 12px;
+  min-width: 280px;
+  animation: slideDownFade 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  z-index: 2000;
 }
 
 @keyframes slideDown {
@@ -223,72 +232,70 @@
   }
 }
 
-.dropdown-menu button {
-  width: 100%;
-  padding: 12px 16px;
-  background: transparent;
-  border: none;
-  text-align: left;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--red);
-  cursor: pointer;
-  border-radius: 6px;
-  transition: background 0.3s ease;
-}
-
-.dropdown-menu button:hover {
-  background: var(--grey-light);
+@keyframes slideDownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 /* Sidebar */
 .sidebar {
   position: fixed;
-  left: 0;
-  top: 0;
   width: 200px;
   height: 100vh;
-  background: linear-gradient(180deg, var(--blue) 0%, var(--blue-dark) 100%);
+  background: var(--bg);
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 20px 0;
-  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  box-shadow: var(--shadow-md);
   z-index: 1001;
 }
 
 .logo-container {
-  width: 100%;
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
-  margin-bottom: 30px;
-  padding: 10px 0;
+  padding: 0;
 }
 
 .logo-icon {
-  width: 120px;
-  height: 50px;
+  width: 100px;
+  height: 45px;
   object-fit: contain;
-  filter: brightness(0) invert(1);
 }
 
 .search-sidebar-btn {
-  width: 160px;
+  position: absolute;
+  top: 115px;
+  left: 20px;
+  right: 20px;
+  width: auto;
   height: 50px;
-  background: transparent;
+  background: var(--gray-100);
+  border: 1px solid var(--border-light);
   border-radius: 10px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-bottom: 20px;
 }
 
 .search-sidebar-btn:hover {
+  background: var(--primary);
+  border-color: var(--primary);
   color: white;
 }
 
@@ -315,18 +322,22 @@
 }
 
 .nav-menu {
-  width: 100%;
+  position: absolute;
+  top: 180px;
+  left: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 8px;
+  padding: 0 20px;
 }
 
 .nav-item {
-  width: 160px;
+  width: 100%;
   height: 50px;
   background: transparent;
-  border: none;
+  border: 1px solid transparent;
   border-radius: 10px;
   display: flex;
   flex-direction: row;
@@ -334,19 +345,22 @@
   justify-content: flex-start;
   gap: 12px;
   padding: 0 20px;
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .nav-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  background: var(--gray-100);
+  border-color: var(--border-light);
+  color: var(--text-main);
 }
 
 .nav-item.active {
-  background: var(--orange);
+  background: var(--primary);
+  border-color: var(--primary);
   color: white;
+  box-shadow: var(--shadow-sm);
 }
 
 .nav-item .icon {
@@ -362,29 +376,35 @@
 
 /* Main Content */
 .main-content {
-  margin-left: 200px;
-  margin-top: 60px;
-  width: calc(100% - 200px);
-  height: calc(100vh - 60px);
+  margin-left: 220px;
+  margin-top: 105px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  width: calc(100% - 240px);
+  height: calc(100vh - 110px);
   position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
 }
 
 /* Mobile Search Bar - Hidden on desktop */
 .mobile-search-bar,
-.mobile-filter-bar {
+.mobile-filter-bar,
+.profile-menu-wrapper-mobile {
   display: none;
 }
 
 /* Search Panel */
 .search-panel {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 0;
+  left: 0;
   width: 350px;
-  max-height: calc(100% - 40px);
+  max-height: 100%;
   background: var(--bg);
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
   z-index: 1000;
   display: flex;
   flex-direction: column;
@@ -708,15 +728,17 @@
   .main-content {
     margin-left: 0;
     margin-top: 0;
+    margin-right: 0;
     margin-bottom: 0;
     width: 100%;
     height: 100vh;
+    border-radius: 0;
   }
 
   .mobile-search-bar {
     display: flex;
     background: white;
-    border-radius: 50px;
+    border-radius: 20px;
     padding: 12px 20px;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
     align-items: center;
@@ -724,9 +746,13 @@
     position: absolute;
     top: 16px;
     left: 16px;
-    right: 16px;
+    right: 70px;
     z-index: 1000;
-  }
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+}
 
   .mobile-search-bar svg {
     color: var(--gray-600);
@@ -748,17 +774,27 @@
   }
 
   .profile-menu-wrapper-mobile {
-    position: relative;
-    margin-left: auto;
-    flex-shrink: 0;
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 1000;
+    display: block;
   }
 
   .profile-mobile-btn-map {
+    width: 48px;
+    height: 48px;
+    background: white;
+    border: none;
+    border-radius: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
     flex-shrink: 0;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+    color: var(--gray-600);
+    cursor: pointer;
   }
 
   .profile-mobile-btn-map:active {
@@ -767,13 +803,13 @@
 
   .profile-dropdown-map {
     position: absolute;
-    top: 52px;
+    top: 110px;
     right: 0;
     background: white;
     border-radius: 16px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.08);
     min-width: 280px;
-    z-index: 2000;
+    z-index: 3000;
     animation: slideDownFade 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
     padding: 12px;

@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import './DetailInventaris.css'
+import { Button, Badge, Input, Modal } from '../../components'
+import './DetailAsset.css'
 
 function DetailInventaris() {
   const navigate = useNavigate()
   const { id, perangkatId } = useParams()
   const [showAddModal, setShowAddModal] = useState(false)
   const [showEditModal, setShowEditModal] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [itemToDelete, setItemToDelete] = useState(null)
   const [editingItem, setEditingItem] = useState(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [filterPerangkat, setFilterPerangkat] = useState('all')
@@ -20,8 +23,8 @@ function DetailInventaris() {
   })
   const [currentData, setCurrentData] = useState(null)
 
-  // Data inventaris per perangkat (struktur: '1-1' = lokasi 1, perangkat 1)
-  const inventarisData = {
+  // Data Detail per perangkat (struktur: '1-1' = lokasi 1, perangkat 1)
+  const DetailData = {
     '1-1': { // Stasiun Lempuyangan - CCTV IP Camera
       perangkatNama: 'CCTV IP Camera',
       lokasiNama: 'Stasiun Lempuyangan',
@@ -145,15 +148,15 @@ function DetailInventaris() {
 
     if (perangkatId) {
       // Jika ada perangkatId, ambil data perangkat spesifik
-      data = inventarisData[`${id}-${perangkatId}`] || inventarisData.default
+      data = DetailData[`${id}-${perangkatId}`] || DetailData.default
       items = data.items || []
     } else {
       // Jika tidak ada perangkatId, gabungkan semua perangkat dari lokasi
       const lokasiName = id === '1' ? 'Stasiun Lempuyangan' : 'Stasiun Tugu Yogyakarta'
-      const allPerangkatKeys = Object.keys(inventarisData).filter(key => key.startsWith(`${id}-`))
+      const allPerangkatKeys = Object.keys(DetailData).filter(key => key.startsWith(`${id}-`))
       
       // Gabungkan semua items dari semua perangkat
-      items = allPerangkatKeys.flatMap(key => inventarisData[key].items || [])
+      items = allPerangkatKeys.flatMap(key => DetailData[key].items || [])
       
       data = {
         perangkatNama: 'Semua Perangkat',
@@ -227,46 +230,60 @@ function DetailInventaris() {
   }
 
   const handleDeleteItem = (itemId) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus item ini?')) {
-      setAllItems(allItems.filter(item => item.id !== itemId))
-      console.log('Delete item:', itemId)
+    const item = allItems.find(i => i.id === itemId)
+    setItemToDelete(item)
+    setShowDeleteModal(true)
+  }
+
+  const confirmDelete = () => {
+    if (itemToDelete) {
+      setAllItems(allItems.filter(item => item.id !== itemToDelete.id))
+      console.log('Delete item:', itemToDelete.id)
+      setShowDeleteModal(false)
+      setItemToDelete(null)
+      setActiveMenuId(null)
     }
+  }
+
+  const cancelDelete = () => {
+    setShowDeleteModal(false)
+    setItemToDelete(null)
   }
 
   if (!currentData) {
     return (
-      <div className="detail-inventaris-container">
-        <div className="inventaris-header">
+      <div className="detail-Detail-container">
+        <div className="Detail-header">
           <button className="back-btn" onClick={() => navigate(-1)}>
             <span>&lt;</span>
           </button>
-          <h1 className="inventaris-title">Memuat data...</h1>
+          <h1 className="Detail-title">Memuat data...</h1>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="detail-inventaris-container">
+    <div className="detail-Detail-container">
       {/* Header */}
-      <div className="inventaris-header">
+      <div className="Detail-header">
         <button className="back-btn" onClick={() => navigate(-1)}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
         <div className="header-info">
-          <h1 className="inventaris-title">{currentData.perangkatNama}</h1>
-          <p className="inventaris-subtitle">{currentData.lokasiNama}</p>
+          <h1 className="Detail-title">{currentData.perangkatNama}</h1>
+          <p className="Detail-subtitle">{currentData.lokasiNama}</p>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="inventaris-content">
+      <div className="Detail-content">
         {/* Stats Section */}
-        <div className="inventaris-stats-section">
-          <div className="inventaris-stat-card">
-            <div className="inventaris-stat-icon total">
+        <div className="Detail-stats-section">
+          <div className="Detail-stat-card">
+            <div className="Detail-stat-icon total">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <rect x="3" y="3" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
                 <rect x="14" y="3" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
@@ -274,59 +291,72 @@ function DetailInventaris() {
                 <rect x="3" y="14" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
               </svg>
             </div>
-            <div className="inventaris-stat-info">
-              <p className="inventaris-stat-label">Total</p>
-              <p className="inventaris-stat-value">{currentData.total}</p>
+            <div className="Detail-stat-info">
+              <p className="Detail-stat-label">Total</p>
+              <p className="Detail-stat-value">{currentData.total}</p>
             </div>
           </div>
 
-          <div className="inventaris-stat-card">
-            <div className="inventaris-stat-icon aktif">
+          <div className="Detail-stat-card">
+            <div className="Detail-stat-icon aktif">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 <polyline points="22 4 12 14.01 9 11.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <div className="inventaris-stat-info">
-              <p className="inventaris-stat-label">Aktif</p>
-              <p className="inventaris-stat-value">{currentData.aktif}</p>
+            <div className="Detail-stat-info">
+              <p className="Detail-stat-label">Aktif</p>
+              <p className="Detail-stat-value">{currentData.aktif}</p>
             </div>
           </div>
 
-          <div className="inventaris-stat-card">
-            <div className="inventaris-stat-icon nonaktif">
+          <div className="Detail-stat-card">
+            <div className="Detail-stat-icon nonaktif">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
                 <line x1="12" y1="8" x2="12" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
             </div>
-            <div className="inventaris-stat-info">
-              <p className="inventaris-stat-label">Non-Aktif</p>
-              <p className="inventaris-stat-value">{currentData.nonAktif}</p>
+            <div className="Detail-stat-info">
+              <p className="Detail-stat-label">Non-Aktif</p>
+              <p className="Detail-stat-value">{currentData.nonAktif}</p>
             </div>
           </div>
         </div>
 
         {/* List Section */}
-        <div className="inventaris-list-section">
+        <div className="Detail-list-section">
           <div className="list-header">
             <h2 className="list-title">Daftar Item</h2>
-            <button className="add-btn" onClick={handleAddItem}>
-              <span className="plus-icon">+</span>
-              <span className="add-text">Tambah</span>
-            </button>
+            <Button 
+              variant="success" 
+              size="medium"
+              onClick={handleAddItem}
+              icon={
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 5v14M5 12h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              }
+            >
+              Tambah
+            </Button>
           </div>
 
           {/* Filter Controls */}
           <div className="filter-controls">
             <div className="filter-group">
-              <label className="filter-label">Cari</label>
-              <input
+              <Input
                 type="text"
+                label="Cari"
                 placeholder="Cari nama atau lokasi..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="filter-input"
+                leftIcon={
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <circle cx="11" cy="11" r="8" stroke="currentColor" strokeWidth="2"/>
+                    <path d="m21 21-4.35-4.35" stroke="currentColor" strokeWidth="2"/>
+                  </svg>
+                }
               />
             </div>
             
@@ -362,7 +392,7 @@ function DetailInventaris() {
 
           {/* Table */}
           <div className="table-wrapper">
-            <table className="inventaris-table">
+            <table className="Detail-table">
               <thead>
                 <tr>
                   <th>Nama Perangkat</th>
@@ -378,37 +408,42 @@ function DetailInventaris() {
                       <td className="nama-cell">{item.nama}</td>
                       <td className="lokasi-cell">{item.lokasi}</td>
                       <td className="status-cell">
-                        <span className={`status-badge ${item.status}`}>
+                        <Badge 
+                          variant={item.status === 'aktif' ? 'success' : 'danger'}
+                          dot
+                        >
                           {item.status === 'aktif' ? 'Aktif' : 'Tidak Aktif'}
-                        </span>
+                        </Badge>
                       </td>
                       <td className="aksi-cell">
                         {/* Desktop: 2 buttons */}
                         <div className="action-buttons-desktop">
-                          <button 
-                            className="action-btn edit-btn"
+                          <Button
+                            variant="secondary"
+                            size="small"
                             onClick={() => handleEditItem(item)}
-                            title="Edit"
+                            icon={
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M12 20h9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            }
                           >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                              <path d="M12 20h9" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            <span>Edit</span>
-                          </button>
-                          <button 
-                            className="action-btn delete-btn"
+                            Edit
+                          </Button>
+                          <Button
+                            variant="danger"
+                            size="small"
                             onClick={() => handleDeleteItem(item.id)}
-                            title="Hapus"
+                            icon={
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            }
                           >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                              <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              <line x1="10" y1="11" x2="10" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                              <line x1="14" y1="11" x2="14" y2="17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                            <span>Hapus</span>
-                          </button>
+                            Hapus
+                          </Button>
                         </div>
 
                         {/* Mobile: 1 button with dropdown */}
@@ -462,92 +497,131 @@ function DetailInventaris() {
       </div>
 
       {/* Add/Edit Modal */}
-      {(showAddModal || showEditModal) && (
-        <div className="inventaris-modal-overlay" onClick={() => {
+      <Modal
+        isOpen={showAddModal || showEditModal}
+        onClose={() => {
           setShowAddModal(false)
           setShowEditModal(false)
-        }}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
-              <h2>{editingItem ? 'Edit Item' : 'Tambah Item'}</h2>
-              <button 
-                className="modal-close"
-                onClick={() => {
-                  setShowAddModal(false)
-                  setShowEditModal(false)
-                }}
-              >
-                ✕
-              </button>
-            </div>
+        }}
+        title={editingItem ? 'Edit Item' : 'Tambah Item'}
+        size="medium"
+        footer={
+          <>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setShowAddModal(false)
+                setShowEditModal(false)
+              }}
+            >
+              Batal
+            </Button>
+            <Button
+              variant="success"
+              onClick={handleSaveItem}
+            >
+              Simpan
+            </Button>
+          </>
+        }
+      >
+        <div className="modal-body">
+          <Input
+            label="Nama Perangkat"
+            placeholder="Masukkan nama perangkat"
+            value={formData.nama}
+            onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
+          />
 
-            <div className="modal-body">
-              <div className="form-group">
-                <label>Nama Perangkat</label>
-                <input
-                  type="text"
-                  placeholder="Masukkan nama perangkat"
-                  value={formData.nama}
-                  onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
-                  className="form-input"
-                />
-              </div>
+          <Input
+            label="Jenis Perangkat"
+            placeholder="Masukkan jenis perangkat"
+            value={formData.jenis}
+            onChange={(e) => setFormData({ ...formData, jenis: e.target.value })}
+          />
 
-              <div className="form-group">
-                <label> Perangkat</label>
-                <input
-                  type="text"
-                  placeholder="Masukkan jenis perangkat"
-                  value={formData.jenis}
-                  onChange={(e) => setFormData({ ...formData, jenis: e.target.value })}
-                  className="form-input"
-                />
-              </div>
+          <Input
+            label="Lokasi"
+            placeholder="Masukkan lokasi"
+            value={formData.lokasi}
+            onChange={(e) => setFormData({ ...formData, lokasi: e.target.value })}
+          />
 
-              <div className="form-group">
-                <label>Lokasi</label>
-                <input
-                  type="text"
-                  placeholder="Masukkan lokasi"
-                  value={formData.lokasi}
-                  onChange={(e) => setFormData({ ...formData, lokasi: e.target.value })}
-                  className="form-input"
-                />
-              </div>
-
-              <div className="form-group">
-                <label>Status</label>
-                <select
-                  value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                  className="form-select"
-                >
-                  <option value="aktif">Aktif</option>
-                  <option value="tidak_aktif">Tidak Aktif</option>
-                </select>
-              </div>
-            </div>
-
-            <div className="modal-footer">
-              <button 
-                className="btn-cancel"
-                onClick={() => {
-                  setShowAddModal(false)
-                  setShowEditModal(false)
-                }}
-              >
-                Batal
-              </button>
-              <button 
-                className="btn-save"
-                onClick={handleSaveItem}
-              >
-                Simpan
-              </button>
-            </div>
+          <div className="form-group">
+            <label>Status</label>
+            <select
+              value={formData.status}
+              onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+              className="form-select"
+              style={{ 
+                width: '100%', 
+                padding: '10px 12px', 
+                border: '1px solid #e5e7eb',
+                borderRadius: '8px',
+                fontSize: '14px',
+                marginTop: '4px'
+              }}
+            >
+              <option value="aktif">Aktif</option>
+              <option value="tidak_aktif">Tidak Aktif</option>
+            </select>
           </div>
         </div>
-      )}
+      </Modal>
+
+      {/* Delete Confirmation Modal */}
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={cancelDelete}
+        title="Konfirmasi Hapus"
+        size="small"
+        footer={
+          <>
+            <Button
+              variant="ghost"
+              onClick={cancelDelete}
+            >
+              Batal
+            </Button>
+            <Button
+              variant="danger"
+              onClick={confirmDelete}
+              icon={
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <polyline points="3 6 5 6 21 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              }
+            >
+              Hapus
+            </Button>
+          </>
+        }
+      >
+        {itemToDelete && (
+          <div style={{ padding: '10px 0' }}>
+            <p style={{ marginBottom: '15px', color: 'var(--text-main)' }}>
+              Apakah Anda yakin ingin menghapus item ini?
+            </p>
+            <div style={{ 
+              background: 'var(--gray-50)', 
+              padding: '12px', 
+              borderRadius: '8px',
+              border: '1px solid var(--border-light)'
+            }}>
+              <p style={{ margin: '0 0 8px 0', fontWeight: '600', color: 'var(--text-main)' }}>
+                {itemToDelete.nama}
+              </p>
+              <p style={{ margin: '0', fontSize: '14px', color: 'var(--text-secondary)' }}>
+                Lokasi: {itemToDelete.lokasi}
+              </p>
+            </div>
+            <p style={{ marginTop: '15px', fontSize: '13px', color: 'var(--text-muted)' }}>
+              Tindakan ini tidak dapat dibatalkan.
+            </p>
+          </div>
+        )}
+      </Modal>
     </div>
   )
 }

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Button, Input } from '../../components'
 import './Login.css'
 
 function Login({ onLogin }) {
@@ -25,37 +26,43 @@ function Login({ onLogin }) {
         </div>
 
         <form onSubmit={handleSubmit} className="login-form">
-          <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="nama@email.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
+          <Input
+            type="email"
+            label="Email"
+            placeholder="nama@email.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+            leftIcon={
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" strokeWidth="2"/>
+                <path d="m22 6-10 7L2 6" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            }
+          />
 
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Masukkan password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+          <Input
+            type="password"
+            label="Password"
+            placeholder="Masukkan password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+            leftIcon={
+              <svg viewBox="0 0 24 24" fill="none">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" stroke="currentColor" strokeWidth="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" stroke="currentColor" strokeWidth="2"/>
+              </svg>
+            }
+          />
 
           <div className="forgot-password">
             <a href="#forgot">Lupa Password?</a>
           </div>
 
-          <button type="submit" className="login-button">
+          <Button type="submit" variant="primary" size="large" fullWidth>
             Login
-          </button>
+          </Button>
 
           <div className="register-link">
             <p>Belum punya akun? <a href="/register" onClick={(e) => { e.preventDefault(); navigate('/register') }}>Daftar di sini</a></p>
