@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Login from './components/login/Login'
 import Register from './components/register/Register'
 import Home from './components/home/Home'
-import DetailAset from './components/detail-aset/DetailAset'
-import DetailInventaris from './components/detail-inventaris/DetailInventaris'
+import DetailAset from './components/locationDetail/LocationDetail'
+import DetailInventaris from './components/detailAsset/DetailAsset'
 import './App.css'
 
 function App() {

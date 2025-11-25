@@ -1,4 +1,4 @@
-.detail-inventaris-container {
+.detail-Detail-container {
   min-height: 100vh;
   background: var(--bg-soft);
   padding: 20px;
@@ -7,7 +7,7 @@
 }
 
 /* Header */
-.inventaris-header {
+.Detail-header {
   display: flex;
   align-items: center;
   gap: 15px;
@@ -42,28 +42,28 @@
   flex: 1;
 }
 
-.inventaris-title {
+.Detail-title {
   font-size: 28px;
   font-weight: 700;
   color: var(--text-main);
   margin: 0;
 }
 
-.inventaris-subtitle {
+.Detail-subtitle {
   font-size: 13px;
   color: var(--text-muted);
   margin: 4px 0 0 0;
 }
 
 /* Content */
-.inventaris-content {
+.Detail-content {
   display: flex;
   flex-direction: column;
   gap: 30px;
 }
 
 /* List Section */
-.inventaris-list-section {
+.Detail-list-section {
   background: var(--bg);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
@@ -171,20 +171,20 @@
   overflow-x: hidden;
 }
 
-.inventaris-table {
+.Detail-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 14px;
   table-layout: fixed;
 }
 
-.inventaris-table thead {
+.Detail-table thead {
   background: var(--gray-50);
   position: sticky;
   top: 0;
 }
 
-.inventaris-table th {
+.Detail-table th {
   padding: 16px 20px;
   text-align: left;
   font-weight: 600;
@@ -195,13 +195,13 @@
   letter-spacing: 0.5px;
 }
 
-.inventaris-table td {
+.Detail-table td {
   padding: 16px 20px;
   border-bottom: 1px solid var(--gray-100);
   vertical-align: middle;
 }
 
-.inventaris-table tbody tr:hover {
+.Detail-table tbody tr:hover {
   background: var(--gray-50);
 }
 
@@ -391,13 +391,13 @@
 }
 
 /* Stats Section */
-.inventaris-stats-section {
+.Detail-stats-section {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
-.inventaris-stat-card {
+.Detail-stat-card {
   background: var(--bg);
   border-radius: var(--radius-xl);
   padding: 20px;
@@ -407,7 +407,7 @@
   gap: 15px;
 }
 
-.inventaris-stat-icon {
+.Detail-stat-icon {
   width: 60px;
   height: 60px;
   border-radius: var(--radius-lg);
@@ -417,26 +417,26 @@
   flex-shrink: 0;
 }
 
-.inventaris-stat-icon.total {
+.Detail-stat-icon.total {
   background: var(--secondary-gradient);
   color: white;
 }
 
-.inventaris-stat-icon.aktif {
+.Detail-stat-icon.aktif {
   background: var(--success-gradient);
   color: white;
 }
 
-.inventaris-stat-icon.nonaktif {
+.Detail-stat-icon.nonaktif {
   background: var(--danger-gradient);
   color: white;
 }
 
-.inventaris-stat-info {
+.Detail-stat-info {
   flex: 1;
 }
 
-.inventaris-stat-label {
+.Detail-stat-label {
   font-size: 15px;
   color: var(--text-main);
   margin: 0;
@@ -444,7 +444,7 @@
   letter-spacing: 0.5px;
 }
 
-.inventaris-stat-value {
+.Detail-stat-value {
   font-size: 25px;
   font-weight: 700;
   color: #333;
@@ -452,7 +452,7 @@
 }
 
 /* Modal */
-.inventaris-modal-overlay {
+.Detail-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -597,35 +597,35 @@
 
 /* Responsive */
 @media (max-width: 1024px) {
-  .inventaris-stats-section {
+  .Detail-stats-section {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
-  .detail-inventaris-container {
+  .detail-Detail-container {
     padding: 10px;
   }
 
-  .inventaris-header {
+  .Detail-header {
     padding: 15px;
     gap: 10px;
     margin-bottom: 15px;
   }
 
-  .inventaris-title {
+  .Detail-title {
     font-size: 18px;
   }
 
-  .inventaris-subtitle {
+  .Detail-subtitle {
     font-size: 12px;
   }
 
-  .inventaris-content {
+  .Detail-content {
     gap: 15px;
   }
 
-  .inventaris-stats-section {
+  .Detail-stats-section {
     grid-template-columns: 1fr;
     gap: 10px;
   }
@@ -667,19 +667,19 @@
     font-size: 13px;
   }
 
-  .inventaris-table th,
-  .inventaris-table td {
+  .Detail-table th,
+  .Detail-table td {
     padding: 12px 15px;
     font-size: 12px;
   }
 
-  .inventaris-table th:first-child,
-  .inventaris-table td:first-child {
+  .Detail-table th:first-child,
+  .Detail-table td:first-child {
     padding-left: 15px;
   }
 
-  .inventaris-table th:last-child,
-  .inventaris-table td:last-child {
+  .Detail-table th:last-child,
+  .Detail-table td:last-child {
     padding-right: 15px;
   }
 
@@ -715,25 +715,25 @@
     width: 95%;
   }
 
-  .inventaris-stat-card {
+  .Detail-stat-card {
     padding: 15px;
   }
 
-  .inventaris-stat-icon {
+  .Detail-stat-icon {
     width: 50px;
     height: 50px;
   }
 
-  .inventaris-stat-icon svg {
+  .Detail-stat-icon svg {
     width: 20px;
     height: 20px;
   }
 
-  .inventaris-stat-value {
+  .Detail-stat-value {
     font-size: 22px;
   }
 
-  .inventaris-stats-section {
+  .Detail-stats-section {
     gap: 10px;
   }
 }

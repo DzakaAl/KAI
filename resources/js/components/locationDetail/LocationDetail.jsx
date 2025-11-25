@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import './DetailAset.css'
+import './LocationDetail.css'
 
 function DetailAset() {
   const navigate = useNavigate()

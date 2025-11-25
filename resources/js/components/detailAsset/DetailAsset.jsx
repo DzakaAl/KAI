@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import './DetailInventaris.css'
+import './DetailAsset.css'
 
 function DetailInventaris() {
   const navigate = useNavigate()
@@ -20,8 +20,8 @@ function DetailInventaris() {
   })
   const [currentData, setCurrentData] = useState(null)
 
-  // Data inventaris per perangkat (struktur: '1-1' = lokasi 1, perangkat 1)
-  const inventarisData = {
+  // Data Detail per perangkat (struktur: '1-1' = lokasi 1, perangkat 1)
+  const DetailData = {
     '1-1': { // Stasiun Lempuyangan - CCTV IP Camera
       perangkatNama: 'CCTV IP Camera',
       lokasiNama: 'Stasiun Lempuyangan',
@@ -145,15 +145,15 @@ function DetailInventaris() {
 
     if (perangkatId) {
       // Jika ada perangkatId, ambil data perangkat spesifik
-      data = inventarisData[`${id}-${perangkatId}`] || inventarisData.default
+      data = DetailData[`${id}-${perangkatId}`] || DetailData.default
       items = data.items || []
     } else {
       // Jika tidak ada perangkatId, gabungkan semua perangkat dari lokasi
       const lokasiName = id === '1' ? 'Stasiun Lempuyangan' : 'Stasiun Tugu Yogyakarta'
-      const allPerangkatKeys = Object.keys(inventarisData).filter(key => key.startsWith(`${id}-`))
+      const allPerangkatKeys = Object.keys(DetailData).filter(key => key.startsWith(`${id}-`))
       
       // Gabungkan semua items dari semua perangkat
-      items = allPerangkatKeys.flatMap(key => inventarisData[key].items || [])
+      items = allPerangkatKeys.flatMap(key => DetailData[key].items || [])
       
       data = {
         perangkatNama: 'Semua Perangkat',
@@ -235,38 +235,38 @@ function DetailInventaris() {
 
   if (!currentData) {
     return (
-      <div className="detail-inventaris-container">
-        <div className="inventaris-header">
+      <div className="detail-Detail-container">
+        <div className="Detail-header">
           <button className="back-btn" onClick={() => navigate(-1)}>
             <span>&lt;</span>
           </button>
-          <h1 className="inventaris-title">Memuat data...</h1>
+          <h1 className="Detail-title">Memuat data...</h1>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="detail-inventaris-container">
+    <div className="detail-Detail-container">
       {/* Header */}
-      <div className="inventaris-header">
+      <div className="Detail-header">
         <button className="back-btn" onClick={() => navigate(-1)}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M15 18l-6-6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </button>
         <div className="header-info">
-          <h1 className="inventaris-title">{currentData.perangkatNama}</h1>
-          <p className="inventaris-subtitle">{currentData.lokasiNama}</p>
+          <h1 className="Detail-title">{currentData.perangkatNama}</h1>
+          <p className="Detail-subtitle">{currentData.lokasiNama}</p>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="inventaris-content">
+      <div className="Detail-content">
         {/* Stats Section */}
-        <div className="inventaris-stats-section">
-          <div className="inventaris-stat-card">
-            <div className="inventaris-stat-icon total">
+        <div className="Detail-stats-section">
+          <div className="Detail-stat-card">
+            <div className="Detail-stat-icon total">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <rect x="3" y="3" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
                 <rect x="14" y="3" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
@@ -274,41 +274,41 @@ function DetailInventaris() {
                 <rect x="3" y="14" width="7" height="7" stroke="currentColor" strokeWidth="2"/>
               </svg>
             </div>
-            <div className="inventaris-stat-info">
-              <p className="inventaris-stat-label">Total</p>
-              <p className="inventaris-stat-value">{currentData.total}</p>
+            <div className="Detail-stat-info">
+              <p className="Detail-stat-label">Total</p>
+              <p className="Detail-stat-value">{currentData.total}</p>
             </div>
           </div>
 
-          <div className="inventaris-stat-card">
-            <div className="inventaris-stat-icon aktif">
+          <div className="Detail-stat-card">
+            <div className="Detail-stat-icon aktif">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                 <polyline points="22 4 12 14.01 9 11.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>
-            <div className="inventaris-stat-info">
-              <p className="inventaris-stat-label">Aktif</p>
-              <p className="inventaris-stat-value">{currentData.aktif}</p>
+            <div className="Detail-stat-info">
+              <p className="Detail-stat-label">Aktif</p>
+              <p className="Detail-stat-value">{currentData.aktif}</p>
             </div>
           </div>
 
-          <div className="inventaris-stat-card">
-            <div className="inventaris-stat-icon nonaktif">
+          <div className="Detail-stat-card">
+            <div className="Detail-stat-icon nonaktif">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                 <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
                 <line x1="12" y1="8" x2="12" y2="16" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
             </div>
-            <div className="inventaris-stat-info">
-              <p className="inventaris-stat-label">Non-Aktif</p>
-              <p className="inventaris-stat-value">{currentData.nonAktif}</p>
+            <div className="Detail-stat-info">
+              <p className="Detail-stat-label">Non-Aktif</p>
+              <p className="Detail-stat-value">{currentData.nonAktif}</p>
             </div>
           </div>
         </div>
 
         {/* List Section */}
-        <div className="inventaris-list-section">
+        <div className="Detail-list-section">
           <div className="list-header">
             <h2 className="list-title">Daftar Item</h2>
             <button className="add-btn" onClick={handleAddItem}>
@@ -362,7 +362,7 @@ function DetailInventaris() {
 
           {/* Table */}
           <div className="table-wrapper">
-            <table className="inventaris-table">
+            <table className="Detail-table">
               <thead>
                 <tr>
                   <th>Nama Perangkat</th>
@@ -463,7 +463,7 @@ function DetailInventaris() {
 
       {/* Add/Edit Modal */}
       {(showAddModal || showEditModal) && (
-        <div className="inventaris-modal-overlay" onClick={() => {
+        <div className="Detail-modal-overlay" onClick={() => {
           setShowAddModal(false)
           setShowEditModal(false)
         }}>
